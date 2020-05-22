@@ -208,13 +208,13 @@ Para llamar funciones les llamas con su nombre y () al fin. aldentro de los () p
 ```
 miFuncion("asdf");
 miFuncion2("asdf");
-miObjeto.muFuncion();
+miObjeto.miFuncion();
 ```
 
 Una funcion puede volver un valor con `return`, el recipiente puede hacer con ese valor lo que quiere - por ejemplo guardarlo en una variable:
 
 ```
-functino cualEsMiNombre(nombre){
+function cualEsMiNombre(nombre){
     return "tu nombre es "+nombre;
 }
 
