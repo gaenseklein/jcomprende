@@ -662,3 +662,432 @@ body {
 ```
 
 Felicitaciones. Lograste terminar este parte largo del tutorial.
+
+---
+# A Continuar
+
+ya preparé los imagenes para este juego. Estan en el directorio de ur. 
+vamos a acolocarles. Vea a este imagen:
+
+![](tablaconnumeros.png)
+
+Ahi veamos cual numero debe tener cual imagen. 
+veamos a las castillas y les damos clases para distinguirles por imagen. La estrella ya tiene clase extra. usamos nombres como los imagenes para no confundirlos. 
+- Imagen 0 y 2 damos la clase arriba
+- imagen 1, 7, 11, 13, 15 le damos la clase cinco
+- imagen 4,8,10,14,16 damos la clase ojos
+- imagen 6 y 12 damos la clase cuatrocincos
+- imagen 18 damos la clase fondo
+
+asi vamos a entrar ur.html y añadimos las clases de mano a todas castillas. para eso lo entramos donde se declare *class="castilla"* y lo pongamos de forma *class="castilla arriba"*. 
+
+
+uff... ya estamos?
+
+tu tabla debe estar ahora asi:
+```
+<div id="tabla">
+    <button class="castilla arriba">0</button>
+    <button class="castilla cinco">1</button>
+    <button class="castilla arriba">2</button>
+    <button class="castilla estrella">3</button>
+    <button class="castilla ojos">4</button>
+    <button class="castilla estrella">5</button>
+    <div id="finJugador1"></div>
+    <button class="castilla cuatrocincos">6</button>                
+    <div id="finJugador2"></div>
+     <div id="inicioJugador1"></div>
+    <button class="castilla cinco">7</button>
+    <div id="inicioJugador2"></div>
+    <button class="castilla ojos">8</button> 
+    <button class="castilla estrella">9</button>
+    <button class="castilla ojos">10</button>
+    <button class="castilla cinco">11</button>
+    <button class="castilla cuatrocincos">12</button>
+    <button class="castilla cinco">13</button>
+    <button class="castilla ojos">14</button>
+    <button class="castilla cinco">15</button>
+    <button class="castilla ojos">16</button>
+    <button class="castilla estrella">17</button>
+    <button class="castilla fondo">18</button>
+    <button class="castilla estrella">19</button>
+</div>
+```
+
+vamos al ur.css para usar esas clases. 
+al fondo pegamos: 
+```
+/* los imagenes del fondo:*/
+
+.estrella{background-image:url("castillaestrella.png");}
+.arriba{background-image:url("castillaarriba.png");}
+.cinco{background-image:url("castillacinco.png");}
+.ojos{background-image:url("castillaojos.png");}
+.cuatrocincos{background-image:url("castillacuatrocincos.png");}
+.fondo{background-image:url("castillafondo.png");}
+
+```
+
+ahí declaramos que cada clase con el nombre debe tener su imagen como imagen de fondo. 
+como es lo único que quieremos declarar asi lo hemos pegado en una linea y para explicarlo mejor arriba hemos dado un commentario *los imagenes del fondo* - que nos explica bien que va a pasar por ahi. eso nos produce una sobrevista mejor. si en el futuro quieremos cambiar un imagen nos facilita encontrar el parte en donde lo tenemos que cambiar. 
+
+ahora puedes guardar todo y ver como aparece en firefox. 
+esta bien? 
+hmm... algo podemos mejorar que no es visible de primera vista. vamos a la entrada de las castillas *.castilla* y lo cambiamos: 
+
+```
+.castilla{
+    width:10vh;
+    height:10vh;
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+```
+
+mejor. ahi declaramos ahora que el imagen del fondo de *cada castilla* debe ser tan grande como la castilla misma: *background-size:cover;* y que no debe repitirse *background-repeat:no-repeat;*. ahi ves que util es usar los clases? 
+
+buenisimo. 
+aprendiste como usar clases en CSS para poner valores iguales a elementos diferentes en la pagina. 
+
+Pero hay una cosa más: 
+Cuando estoy piensando del programa, no me gusta que las castillas sean botones. 
+Porque cuando pienso donde el usuario debe hacer un click es mucho más facil si lo hace a la pieza que quiere mover y no a la castilla donde quiere irse. 
+Asi tenemos que cambiar el ur.html para que no sean más **button** los castillas, pero **div**.
+
+Ya te veo diciendo *Queee? tengo que cambiar todo de mano?*
+Cosas como eso te pasaran muchas veces cuando estas programando. Toma por ejemplo nombres de variables. Primero te parecia bien este nombre, pero cuando avanzas tienes otra cosa que puede tener el mismo nombre. asi para facilitar entender el codigo hay que cambiar este nombre en todos lugares donde aparece. 
+
+El editor de texto, en tu caso Atom, te facilita eso. 
+Entra al "ur.html" - el cursor debe estar aldentro del archivo. 
+
+Ahora ponga las teclas "ctrl + f" para abrir la busqueda de Atom
+Una pantalla abajo se abre con el titulo *Find in Current Buffer*
+y tu cursor esta aldentro de la primera entrada donde se dice *Find in current buffer*
+Ahi entras lo que quieres buscar. En nuestro caso `button`.
+
+Imediamente ves que encuentra todos partes donde se dice "button".
+Ahora haga un click a la entrada abajo donde se dice *Replace in current buffer*
+Ahi entras `div`
+
+Te va a decir *40 results found for 'button'*
+
+Ahora a la derecha hay los botones *Find, Find All, Replace, Replace All*.
+*Find* es ingles para decir *encontrar* *All* es ingles para *todos*
+*Replace* es ingles para decir *Replazar*.
+
+Entonces: 
+Quieremos replazar, entonces hacemos un click a *replace*. 
+Se cambiaba el primer parte y esta ahora en el fin de la primera castilla. 
+otro click, cambia eso...
+Asi puedes continuar - o como son los unicos botones que hay todavia en el documento puedes hacer un click a *Replace All* y se cambia todas entradas en uno. 
+**pero ojo con eso en el futuro**. Es más seguro hacerlo uno por uno para ver si esta cambiando solo este parte. Hay un truco para evitar eso - a ver si lo encuentras por tu mismo. Si no te enseño cuando lo necesitamos ;)
+
+Bien. Tu tabla debe ahora estar asi:
+
+```
+<div id="tabla">
+                <div class="castilla arriba">0</div>
+                <div class="castilla cinco">1</div>
+                <div class="castilla arriba">2</div>
+                <div class="castilla estrella">3</div>
+                <div class="castilla ojos">4</div>
+                <div class="castilla estrella">5</div>
+                <div id="finJugador1"></div>
+                <div class="castilla cuatrocincos">6</div>                
+                <div id="finJugador2"></div>
+                 <div id="inicioJugador1"></div>
+                <div class="castilla cinco">7</div>
+                <div id="inicioJugador2"></div>
+                <div class="castilla ojos">8</div> 
+                <div class="castilla estrella">9</div>
+                <div class="castilla ojos">10</div>
+                <div class="castilla cinco">11</div>
+                <div class="castilla cuatrocincos">12</div>
+                <div class="castilla cinco">13</div>
+                <div class="castilla ojos">14</div>
+                <div class="castilla cinco">15</div>
+                <div class="castilla ojos">16</div>
+                <div class="castilla estrella">17</div>
+                <div class="castilla fondo">18</div>
+                <div class="castilla estrella">19</div>
+            </div>
+```
+Estamos listo con la tabla verdad? 
+Lo que falta sean los dados y las piezas. 
+
+Vamos a poner dados:
+
+arriba del elemento tabla esta el elemento con id dados. ese elemento vamos a llenar con html: 
+
+```
+<div id="dados">
+  <img id="dado0" src="dadoa0.png">
+  <img id="dado1" src="dadoa1.png">
+  <img id="dado2" src="dadob0.png">
+  <img id="dado3" src="dadob1.png">
+  <div id="dadosJuntos"></div>
+</div>
+```
+
+que hicimos?
+el div dados esta ahora llenado con 4 imagenes - el elemento **img**. cada imagen tiene una id *dado0 hasta dado3* y un **src** que es el source - el **nombre del archivo** que quieremos usar para este imagen.
+al final punimos un div con id "dadosJuntos" donde vamos a poner los puntos acumulados mas tarde. por ahora no tiene contenido. 
+
+asi estamos - hay dados. pero no aparecen lindos. 
+vamos a abrir ur.css y pongamos
+
+```
+#dados {
+  grid-area: dados1;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+#dados img {
+  width: 100%;
+}
+```
+
+el `#dados` da a la area dados una **grid-area**, es decir en donde en el **grid** de la `#mesa` debe aparecer. lo nombramos dados1, que sea la area de los dados para jugador 1. 
+
+despues digamos que debe presentar su mismo tambien de forma **grid**. 
+con *grid-template-columns* digamos que va a ser un grid de 4 columnas, cada uno tiene un igual parte del tamaño posible. 
+
+el otro es algo mas dificil: 
+con **#dados img{}** declaramos valores para todos imagenes dentro del elemento con la **id** dados. son justo todos dados que tenemos. se puede escribir tambien por cada dado, pero a nosotros nos parece mejor asi. ahi digamos que el imagen debe obtener todo el espacio horizontal posible. como esta fraccionado arriba en 4 columnas eso nos asegura que el imagen va a cambiar su tamaño para ser exacto como lo quieremos y no como esta en su original. si no lo declaramos el imagen va a ser tan grande como en su archivo - y eso puede ser muy grande o muy chiquito. 
+
+wow - estamos casi listo con la **GUI**. podemos empezar a programar:
+
+---
+# vamos a programar
+
+empezamos con los dados. Como cada ronda empienza en jugar los dados quieremos una funcion - es decir un parte de codigo - que podemos llamar una y otra vez. 
+asi lo llamamos jugarDados y lo juntamos al objeto del juegoUr:
+
+```
+juegoUr.jugadorDados = function(){
+
+}
+```
+bueno, tenemos la función. Ahora - cada dado debe tener un 0 o un 1. 
+Lo podemos lograr con dos funciones juntos en una calculación:
+1. Math.random()
+2. Math.floor()
+
+Esos son funciones del objeto *Math* que siempre esta disponible en javascript. 
+Math.random() nos produce un numero entre 0 y 1, pero nunca 1. 
+Ese numero lo multiplicamos con 2, asi llegamos a un numero entre 0 y 2. 
+Ahora usamos Math.floor() a ese numero para que borre todo despues del coma. 
+Asi un numero 1,345532234256 va a ser un 1, un 0,24235215 va a ser un 0. 
+Asi al final tenemos un 0 o un 1. 
+```
+var numero = Math.random();
+numero=numero*2;
+numero=Math.floor(numero);
+```
+
+O en una linea:
+```
+var numero=Math.floor(Math.random()*2);
+```
+
+Lo entramos para cuatro dados:
+
+```
+juegoUr.jugarDados = function(){
+    var dado1 = Math.floor(Math.random()*2);
+    var dado2 = Math.floor(Math.random()*2);
+    var dado3 = Math.floor(Math.random()*2);
+    var dado4 = Math.floor(Math.random()*2);
+    var resultado = dado1+dado2+dado3+dado4;
+}
+```
+asi tenemos logrado a tener jugado 4 dados y hemos acumulado los puntos en el resultado.
+Ahora quieremos cada dado representado graficamente corecto. Asi hacemos:
+```
+    var dadoimg1 = document.getElementById("dado0");
+    var dadoimg2 = document.getElementById("dado1");
+    var dadoimg2 = document.getElementById("dado1");
+    var dadoimg2 = document.getElementById("dado1");
+```
+
+Asi logramos aceso al imagen que representa cada dado. 
+Pero para. Te das cuenta de algo? 
+Siempre hacemos lo mismo 4 veces. 
+Si continuamos asi nuestro codigo va a ser muy grande y complicado de cambiar cosas despues. 
+
+Hacemos algo más elegante. usamos listas y loops.
+Primero, a vez de tener una variable por cada dado tenemos una lista que contiene todos.
+lo llamamos dados. y otra variable llamamos resultado y sea un numero 0:
+
+```
+juegoUr.jugarDados = function(){
+    var dados = [];
+    var resultado = 0;
+}
+```
+
+Ahora entramos un loop:
+
+```
+juegoUr.jugarDados = function(){
+    var dados = [];
+    var resultado = 0;
+    for(var x=0;x<4;x++){
+
+    }
+}
+```
+
+El `for(var x=0;x<4;x++){}` hace que el codigo entre las `{}` va a ser repitido hasta que x esta 4, entonces 4 veces en total. cada ronda se incrementa `x` por uno. asi puedes distinguir en que ronda estas:
+
+```
+juegoUr.jugarDados = function(){
+    var dados = [];
+    var resultado = 0;
+    for(var x=0;x<4;x++){
+        dados[x] = Math.floor(Math.random()*2);
+        resultado+=dados[x];
+    }
+}
+```
+
+Ahora tenemos una lista con los cuatro dados y el resultado tambien es correcto. 
+Vamos a cambiar los imagenes:
+
+```
+juegoUr.jugarDados = function(){
+    var dados = [];
+    var resultado = 0;
+    for(var x=0;x<4;x++){
+        dados[x] = Math.floor(Math.random()*2);
+        resultado+=dados[x];
+        var img = document.getElementById("dado"+x);
+        var nombreArchivo="dado";
+        if(dados[x]===1){
+            nombreArchivo = nombreArchivo+"a";
+        }else{
+         nombreArchivo = nombreArchivo+"b";
+        }
+        nombreArchivo = nombreArchivo+"0.png";
+        img.src=nombreArchivo;
+    }
+}
+```
+
+Que pasa ahi?
+Primero nos construimos accesso al imagen por su id. como siempre es "dado" mas un numero podemos llamarlo facilmente de esta forma. en la primera ronda es "dado0" en la segunda "dado1"...
+Despues construimos el nombre del Archivo. Empienza siempre con dado, despues viene un "a" si es un punto/1 y b si es un 0. 
+al final ponemos "0.png" para eligir el primer imagen.
+y lo pasamos al **src** del **img** para cambiar el imagen en el navegador.
+
+Pero si, tenemos 3 diferentes imagenes para cada dado. porque no lo usamos?
+```
+juegoUr.jugarDados = function(){
+    var dados = [];
+    var resultado = 0;
+    for(var x=0;x<4;x++){
+        dados[x] = Math.floor(Math.random()*2);
+        resultado+=dados[x];
+        var img = document.getElementById("dado"+x);
+        var nombreArchivo="dado";
+        if(dados[x]===1){
+            nombreArchivo = nombreArchivo+"a";
+        }else{
+         nombreArchivo = nombreArchivo+"b";
+        }
+        nombreArchivo = nombreArchivo+Math.floor(Math.random()*3);
+        nombreArchivo = nombreArchivo+".png";
+        img.src=nombreArchivo;
+    }
+}
+```
+Epa, asi tambien cada vez se toma un imagen de casualidad :)
+
+Bien. Si lo quieres probar guarda todo, abre el firefox y aldentro abres la consola del inspector:
+hagas un click con la derecha en la pagina y eliges "inspect element". o pongas "ctrl+shift+i" o directamente "ctrl+shift+k" para la consola. 
+ahi entras 
+`juegoUr.jugarDados()`
+
+Te debe cambiar los dados si hiciste todo bien hasta ahora :)
+
+Falta el resultado:
+```
+juegoUr.jugarDados = function(){
+    var dados = [];
+    var resultado = 0;
+    for(var x=0;x<4;x++){
+        dados[x] = Math.floor(Math.random()*2);
+        resultado+=dados[x];
+        var img = document.getElementById("dado"+x);
+        var nombreArchivo="dado";
+        if(dados[x]===1){
+            nombreArchivo = nombreArchivo+"a";
+        }else{
+         nombreArchivo = nombreArchivo+"b";
+        }
+        nombreArchivo = nombreArchivo+Math.floor(Math.random()*3);
+        nombreArchivo = nombreArchivo+".png";
+        img.src=nombreArchivo;
+    }
+    this.dadosJuntos = resultado;
+    var enHtml = document.getElementById("dadosJuntos");
+    enHtml.innerText = resultado;
+}
+```
+Como puedes ver lo hacemos afuera del for-loop, es lo que hacemos despues. cuando el loop termina el codigo sigue despues. primero lo guardamos en la variable *dadosJuntos* del objeto en que estamos - eso es el **this**. como estamos en el objeto *juegoUr* el nombre completo para llamarlo desde afuera sea **juegoUr.dadosJuntos**. Aldentro del objeto lo podemos tambien llamar con **this.dadosJuntos**
+
+Bien. Continuamos con el juego. 
+Como el juego es por turno vamos a poner una función turno - que contiene lo que debe pasar cada inicio de turno
+```
+juegoUr.turno = function(){
+    this.jugarDados(); //ahora se actualizó los dados y los puntos para el turno actual
+    if(this.dadosJuntos===0){
+        alert("Ooooh... un 0... perdiste tu turno");
+        this.terminaTurno(); //no hay más que hacer en un 0
+        return;
+    }
+}
+```
+
+Empezamos el turno con jugarDados, la funcion que escribimos arriba. Esa nos produce un numero que podemos usar, los dadosJuntos. Lo primero que chequeamos es si sea 0. Porque si hay un 0 no se puede hacer nada. Si es asi lo digamos al usuario con un alert.
+despues llamamos a otra funcion *terminaTurno*.
+Al final digamos `return`, que dice termina la funciòn por aqui. 
+La funcion *terminaTurno* todavia no existe - asi lo escribimos:
+
+```
+juegoUr.terminaTurno = function(){
+    if(this.jugadorActual===1){
+        this.jugadorActual = 2; 
+    }else{
+        this.jugadorActual=1;
+    }
+    this.turno();
+}
+```
+
+Lo que hacemos aqui es cambiar el turno de Jugador y guardarlo en la variable jugadorActual. Asi sabemos siempre en que turno estamos. despues llamamos a otro turno. 
+Pero vamos a cambiar tambien la posición del dado por aqui. Entramos
+
+
+```
+juegoUr.terminaTurno = function(){
+    if(this.jugadorActual===1){
+        this.jugadorActual = 2; 
+    }else{
+        this.jugadorActual=1;
+    }
+    this.turno();
+    var dados = document.getElementById("dados");
+    dados.classList.add("jugador2");
+}
+```
+
+
+Bien. Terminaste otro gran parte del tutorial. 
+Si lo quieres ver en acción abre la consola de firefox y ponga 
+`juegoUr.terminaTurno();
+En lo proximo continuamos con la actuación de los usuarios.
+
+---
+
