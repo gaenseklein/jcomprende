@@ -979,7 +979,7 @@ juegoUr.jugarDados = function(){
 Que pasa ahi?
 Primero nos construimos accesso al imagen por su id. como siempre es "dado" mas un numero podemos llamarlo facilmente de esta forma. en la primera ronda es "dado0" en la segunda "dado1"...
 Despues construimos el nombre del Archivo. Empienza siempre con dado, despues viene un "a" si es un punto/1 y b si es un 0.
-al final ponemos "0.png" para eligir el primer imagen.
+al final ponemos "0.png" para eligir el primer imagen de los imagenes para cada punto/no punto..
 y lo pasamos al **src** del **img** para cambiar el imagen en el navegador.
 
 Pero si, tenemos 3 diferentes imagenes para cada dado. porque no lo usamos?
