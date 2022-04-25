@@ -1091,3 +1091,4 @@ Si lo quieres ver en acción abre la consola de firefox y ponga
 En lo proximo continuamos con la actuación de los usuarios.
 
 ---
+para continuar abre [tutorial2.md](tutorial2.md)
