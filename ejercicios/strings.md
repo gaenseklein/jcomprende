@@ -16,11 +16,11 @@ ejemplo[0] = "!" //ejemplo "!n frente ahora es otro y eso tambien"
 let contarCaracteres = ejemplo.length //contarCaracteres: 35
 
 y tiene sus propios funciones:
-
+```
 let corto = ejemplo.substring(3,9) //corto "frente" - el parte desde 3 hasta 9
 let posicionDeR = corto.indexOf('r') //posicionDeR: 1
 let ultimaPosicionDeE = corto.lastIndexOf('e') //ultimaPosicionDeE: 5
-
+```
 ## definir un string
 
 ## buscar en un string
