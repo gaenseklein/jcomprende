@@ -8,10 +8,10 @@ Las reglas son simples:
 2. Hay 4 Dados de 2 lados que acumulan sus puntos (asi tienes de 0 hasta 4 puntos cada ronda)
 3. Cada jugador tiene 7 piezas, que tiene que mover desde el inicio hasta el fin (ve al grafico siguiente para verlo mejor)
 4. Al inicio de su ronda el jugador juga a sus dados. Ahora puede eligir si mueve una pieza en la tabla o si entra una nueva pieza a la tabla
-5. Si su pieza termina en una castilla ocupada por pieza del otro jugador la pieza del otro jugador vuelve al inicio
+5. Si su pieza termina en una casilla ocupada por pieza del otro jugador la pieza del otro jugador vuelve al inicio
 6. Si su pieza termina en una casilla de estrella el jugador gana otro turno
-7. Piezas en una casilla de estrella estan protegidos, asi en cambio a regla 5 si una pieza termina en una castilla de estrella ocupada se mueve una castilla más adelante (donde regla 5 si se cumple)
-8. Piezas no pueden mover a castillas ocupadas con piezas del mismo jugador
+7. Piezas en una casilla de estrella estan protegidos, asi en cambio a regla 5 si una pieza termina en una casilla de estrella ocupada se mueve una casilla más adelante (donde regla 5 si se cumple)
+8. Piezas no pueden mover a casillas ocupadas con piezas del mismo jugador
 9. Si el jugador no puede mover ninguna pieza pierde este turno
 
 
@@ -374,9 +374,9 @@ Vamos a empezar con la tabla. Lo vamos al ur.html y entramos aldentro del **div*
 </div>
 ```
 ---
-Ahora vamos a llenar la tabla con los castillas. para los castillas vamos a usar botones:
+Ahora vamos a llenar la tabla con los casillas. para los casillas vamos a usar botones:
 ```
-<button class="castilla"></button>
+<button class="casilla"></button>
 ```
 De esos elementos *button* nececitamos en total 20. copia ese linea entonces 20 veces a la tabla. Esos botones llegan en un orden numeral aldentro de la tabla. El orden va a ser asi:
 ```
@@ -396,26 +396,26 @@ Ese orden es muy importante para recordarnos. Para hacernos más facil lo pongam
     <div id="dados">
     </div>
     <div id="tabla">
-        <button class="castilla">0</button>
-        <button class="castilla">1</button>
-        <button class="castilla">2</button>
-        <button class="castilla">3</button>
-        <button class="castilla">4</button>
-        <button class="castilla">5</button>
-        <button class="castilla">6</button>
-        <button class="castilla">7</button>
-        <button class="castilla">8</button>
-        <button class="castilla">9</button>
-        <button class="castilla">10</button>
-        <button class="castilla">11</button>
-        <button class="castilla">12</button>
-        <button class="castilla">13</button>
-        <button class="castilla">14</button>
-        <button class="castilla">15</button>
-        <button class="castilla">16</button>
-        <button class="castilla">17</button>
-        <button class="castilla">18</button>
-        <button class="castilla">19</button>
+        <button class="casilla">0</button>
+        <button class="casilla">1</button>
+        <button class="casilla">2</button>
+        <button class="casilla">3</button>
+        <button class="casilla">4</button>
+        <button class="casilla">5</button>
+        <button class="casilla">6</button>
+        <button class="casilla">7</button>
+        <button class="casilla">8</button>
+        <button class="casilla">9</button>
+        <button class="casilla">10</button>
+        <button class="casilla">11</button>
+        <button class="casilla">12</button>
+        <button class="casilla">13</button>
+        <button class="casilla">14</button>
+        <button class="casilla">15</button>
+        <button class="casilla">16</button>
+        <button class="casilla">17</button>
+        <button class="casilla">18</button>
+        <button class="casilla">19</button>
     </div>
 </div>
 ```
@@ -464,12 +464,12 @@ I1 7  I2
 Entramos elementos basicos (no nececitan un click) en **ur.html** a sus posiciones y les damos un id correspondiente a su uso para que les podemos ver mejor mas tarde:
 ```
                 ...
-                <button class="castilla">5</button>
+                <button class="casilla">5</button>
                 <div id="finJugador1"></div>
-                <button class="castilla">6</button>                
+                <button class="casilla">6</button>                
                 <div id="finJugador2"></div>
                  <div id="inicioJugador1"></div>
-                <button class="castilla">7</button>
+                <button class="casilla">7</button>
                 <div id="inicioJugador2"></div>
                 ...
 ```
@@ -480,36 +480,36 @@ La tabla entera debe aparecer asi:
 
 ```
 <div id="tabla">
-    <button class="castilla">0</button>
-    <button class="castilla">1</button>
-    <button class="castilla">2</button>
-    <button class="castilla">3</button>
-    <button class="castilla">4</button>
-    <button class="castilla">5</button>
+    <button class="casilla">0</button>
+    <button class="casilla">1</button>
+    <button class="casilla">2</button>
+    <button class="casilla">3</button>
+    <button class="casilla">4</button>
+    <button class="casilla">5</button>
     <div id="finJugador1"></div>
-    <button class="castilla">6</button>                
+    <button class="casilla">6</button>                
     <div id="finJugador2"></div>
      <div id="inicioJugador1"></div>
-    <button class="castilla">7</button>
+    <button class="casilla">7</button>
     <div id="inicioJugador2"></div>
-    <button class="castilla">8</button>
-    <button class="castilla">9</button>
-    <button class="castilla">10</button>
-    <button class="castilla">11</button>
-    <button class="castilla">12</button>
-    <button class="castilla">13</button>
-    <button class="castilla">14</button>
-    <button class="castilla">15</button>
-    <button class="castilla">16</button>
-    <button class="castilla">17</button>
-    <button class="castilla">18</button>
-    <button class="castilla">19</button>
+    <button class="casilla">8</button>
+    <button class="casilla">9</button>
+    <button class="casilla">10</button>
+    <button class="casilla">11</button>
+    <button class="casilla">12</button>
+    <button class="casilla">13</button>
+    <button class="casilla">14</button>
+    <button class="casilla">15</button>
+    <button class="casilla">16</button>
+    <button class="casilla">17</button>
+    <button class="casilla">18</button>
+    <button class="casilla">19</button>
 </div>
 ```
 
 Guardamos, abrimos en firefox: Bien! Ahora tenemos los botones como deben aparecer en el juego. Son gris y tal, pero ahi estan, ya funcionables :)
 ---
-Pero lo que falta es distinguir ciertas castillas - las castillas con la estrella.
+Pero lo que falta es distinguir ciertas casillas - las casillas con la estrella.
 Veamos a la mapa y lo comparemos con la de rules:
 ```
 0  1  2
@@ -528,7 +528,7 @@ Los numeros 0, 2, 9, 17 y 19 tienen estrellas.
 Asi vamos a añadir una clase más a esos elementos, la classe estrella. por ejemplo al boton 19:
 
 ```
-    <button class="castilla estrella">19</button>
+    <button class="casilla estrella">19</button>
 ```
 
 Asi igual a los otros botones.
@@ -536,30 +536,30 @@ Asi igual a los otros botones.
 Tu tabla debe estar ahora asi:
 ```
 <div id="tabla">
-                <button class="castilla estrella">0</button>
-                <button class="castilla">1</button>
-                <button class="castilla estrella">2</button>
-                <button class="castilla">3</button>
-                <button class="castilla">4</button>
-                <button class="castilla">5</button>
+                <button class="casilla estrella">0</button>
+                <button class="casilla">1</button>
+                <button class="casilla estrella">2</button>
+                <button class="casilla">3</button>
+                <button class="casilla">4</button>
+                <button class="casilla">5</button>
                 <div id="finJugador1"></div>
-                <button class="castilla">6</button>                
+                <button class="casilla">6</button>                
                 <div id="finJugador2"></div>
                  <div id="inicioJugador1"></div>
-                <button class="castilla">7</button>
+                <button class="casilla">7</button>
                 <div id="inicioJugador2"></div>
-                <button class="castilla">8</button>
-                <button class="castilla estrella">9</button>
-                <button class="castilla">10</button>
-                <button class="castilla">11</button>
-                <button class="castilla">12</button>
-                <button class="castilla">13</button>
-                <button class="castilla">14</button>
-                <button class="castilla">15</button>
-                <button class="castilla">16</button>
-                <button class="castilla estrella">17</button>
-                <button class="castilla">18</button>
-                <button class="castilla estrella">19</button>
+                <button class="casilla">8</button>
+                <button class="casilla estrella">9</button>
+                <button class="casilla">10</button>
+                <button class="casilla">11</button>
+                <button class="casilla">12</button>
+                <button class="casilla">13</button>
+                <button class="casilla">14</button>
+                <button class="casilla">15</button>
+                <button class="casilla">16</button>
+                <button class="casilla estrella">17</button>
+                <button class="casilla">18</button>
+                <button class="casilla estrella">19</button>
             </div>
 ```
 Guarda todo, abre el firefox y vealo.
@@ -580,10 +580,10 @@ Al fin. La tabla con estrellas.
 ---
 
 Ahora, como estamos ya en el css, vamos a declarar unas cosas más:
-quieremos que la tabla esta mas linda. para eso podemos declarar el tamaño de las castillas:
+quieremos que la tabla esta mas linda. para eso podemos declarar el tamaño de las casillas:
 
 ```
-.castilla{
+.casilla{
     width:10vh;
     height:10vh;
 }
@@ -654,7 +654,7 @@ body {
 .estrella{
     background:red;
 }
-.castilla{
+.casilla{
     width:10vh;
     height:10vh;
 }
@@ -672,14 +672,14 @@ vamos a acolocarles. Vea a este imagen:
 ![](tablaconnumeros.png)
 
 Ahi veamos cual numero debe tener cual imagen.
-veamos a las castillas y les damos clases para distinguirles por imagen. La estrella ya tiene clase extra. usamos nombres como los imagenes para no confundirlos.
+veamos a las casillas y les damos clases para distinguirles por imagen. La estrella ya tiene clase extra. usamos nombres como los imagenes para no confundirlos.
 - Imagen 0 y 2 damos la clase arriba
 - imagen 1, 7, 11, 13, 15 le damos la clase cinco
 - imagen 4,8,10,14,16 damos la clase ojos
 - imagen 6 y 12 damos la clase cuatrocincos
 - imagen 18 damos la clase fondo
 
-asi vamos a entrar ur.html y añadimos las clases de mano a todas castillas. para eso lo entramos donde se declare *class="castilla"* y lo pongamos de forma *class="castilla arriba"*.
+asi vamos a entrar ur.html y añadimos las clases de mano a todas casillas. para eso lo entramos donde se declare *class="casilla"* y lo pongamos de forma *class="casilla arriba"*.
 
 
 uff... ya estamos?
@@ -687,30 +687,30 @@ uff... ya estamos?
 tu tabla debe estar ahora asi:
 ```
 <div id="tabla">
-    <button class="castilla arriba">0</button>
-    <button class="castilla cinco">1</button>
-    <button class="castilla arriba">2</button>
-    <button class="castilla estrella">3</button>
-    <button class="castilla ojos">4</button>
-    <button class="castilla estrella">5</button>
+    <button class="casilla arriba">0</button>
+    <button class="casilla cinco">1</button>
+    <button class="casilla arriba">2</button>
+    <button class="casilla estrella">3</button>
+    <button class="casilla ojos">4</button>
+    <button class="casilla estrella">5</button>
     <div id="finJugador1"></div>
-    <button class="castilla cuatrocincos">6</button>                
+    <button class="casilla cuatrocincos">6</button>                
     <div id="finJugador2"></div>
      <div id="inicioJugador1"></div>
-    <button class="castilla cinco">7</button>
+    <button class="casilla cinco">7</button>
     <div id="inicioJugador2"></div>
-    <button class="castilla ojos">8</button>
-    <button class="castilla estrella">9</button>
-    <button class="castilla ojos">10</button>
-    <button class="castilla cinco">11</button>
-    <button class="castilla cuatrocincos">12</button>
-    <button class="castilla cinco">13</button>
-    <button class="castilla ojos">14</button>
-    <button class="castilla cinco">15</button>
-    <button class="castilla ojos">16</button>
-    <button class="castilla estrella">17</button>
-    <button class="castilla fondo">18</button>
-    <button class="castilla estrella">19</button>
+    <button class="casilla ojos">8</button>
+    <button class="casilla estrella">9</button>
+    <button class="casilla ojos">10</button>
+    <button class="casilla cinco">11</button>
+    <button class="casilla cuatrocincos">12</button>
+    <button class="casilla cinco">13</button>
+    <button class="casilla ojos">14</button>
+    <button class="casilla cinco">15</button>
+    <button class="casilla ojos">16</button>
+    <button class="casilla estrella">17</button>
+    <button class="casilla fondo">18</button>
+    <button class="casilla estrella">19</button>
 </div>
 ```
 
@@ -719,12 +719,12 @@ al fondo pegamos:
 ```
 /* los imagenes del fondo:*/
 
-.estrella{background-image:url("castillaestrella.png");}
-.arriba{background-image:url("castillaarriba.png");}
-.cinco{background-image:url("castillacinco.png");}
-.ojos{background-image:url("castillaojos.png");}
-.cuatrocincos{background-image:url("castillacuatrocincos.png");}
-.fondo{background-image:url("castillafondo.png");}
+.estrella{background-image:url("casillaestrella.png");}
+.arriba{background-image:url("casillaarriba.png");}
+.cinco{background-image:url("casillacinco.png");}
+.ojos{background-image:url("casillaojos.png");}
+.cuatrocincos{background-image:url("casillacuatrocincos.png");}
+.fondo{background-image:url("casillafondo.png");}
 
 ```
 
@@ -733,10 +733,10 @@ como es lo único que quieremos declarar asi lo hemos pegado en una linea y para
 
 ahora puedes guardar todo y ver como aparece en firefox.
 esta bien?
-hmm... algo podemos mejorar que no es visible de primera vista. vamos a la entrada de las castillas *.castilla* y lo cambiamos:
+hmm... algo podemos mejorar que no es visible de primera vista. vamos a la entrada de las casillas *.casilla* y lo cambiamos:
 
 ```
-.castilla{
+.casilla{
     width:10vh;
     height:10vh;
     background-repeat:no-repeat;
@@ -745,15 +745,15 @@ hmm... algo podemos mejorar que no es visible de primera vista. vamos a la entra
 
 ```
 
-mejor. ahi declaramos ahora que el imagen del fondo de *cada castilla* debe ser tan grande como la castilla misma: *background-size:cover;* y que no debe repitirse *background-repeat:no-repeat;*. ahi ves que util es usar los clases?
+mejor. ahi declaramos ahora que el imagen del fondo de *cada casilla* debe ser tan grande como la casilla misma: *background-size:cover;* y que no debe repitirse *background-repeat:no-repeat;*. ahi ves que util es usar los clases?
 
 buenisimo.
 aprendiste como usar clases en CSS para poner valores iguales a elementos diferentes en la pagina.
 
 Pero hay una cosa más:
-Cuando estoy piensando del programa, no me gusta que las castillas sean botones.
-Porque cuando pienso donde el usuario debe hacer un click es mucho más facil si lo hace a la pieza que quiere mover y no a la castilla donde quiere irse.
-Asi tenemos que cambiar el ur.html para que no sean más **button** los castillas, pero **div**.
+Cuando estoy piensando del programa, no me gusta que las casillas sean botones.
+Porque cuando pienso donde el usuario debe hacer un click es mucho más facil si lo hace a la pieza que quiere mover y no a la casilla donde quiere irse.
+Asi tenemos que cambiar el ur.html para que no sean más **button** los casillas, pero **div**.
 
 Ya te veo diciendo *Queee? tengo que cambiar todo de mano?*
 Cosas como eso te pasaran muchas veces cuando estas programando. Toma por ejemplo nombres de variables. Primero te parecia bien este nombre, pero cuando avanzas tienes otra cosa que puede tener el mismo nombre. asi para facilitar entender el codigo hay que cambiar este nombre en todos lugares donde aparece.
@@ -779,7 +779,7 @@ Ahora a la derecha hay los botones *Find, Find All, Replace, Replace All*.
 ![](atom-replace.png)
 
 Quieremos replazar, entonces hacemos un click a *replace*.
-Se cambiaba el primer parte y esta ahora en el fin de la primera castilla.
+Se cambiaba el primer parte y esta ahora en el fin de la primera casilla.
 otro click, cambia eso...
 Asi puedes continuar - o como son los unicos botones que hay todavia en el documento puedes hacer un click a *Replace All* y se cambia todas entradas en uno.
 **pero ojo con eso en el futuro**. Es más seguro hacerlo uno por uno para ver si esta cambiando solo este parte. Hay un truco para evitar eso - a ver si lo encuentras por tu mismo. Si no te enseño cuando lo necesitamos ;)
@@ -788,30 +788,30 @@ Bien. Tu tabla debe ahora estar asi:
 
 ```
 <div id="tabla">
-                <div class="castilla arriba">0</div>
-                <div class="castilla cinco">1</div>
-                <div class="castilla arriba">2</div>
-                <div class="castilla estrella">3</div>
-                <div class="castilla ojos">4</div>
-                <div class="castilla estrella">5</div>
+                <div class="casilla arriba">0</div>
+                <div class="casilla cinco">1</div>
+                <div class="casilla arriba">2</div>
+                <div class="casilla estrella">3</div>
+                <div class="casilla ojos">4</div>
+                <div class="casilla estrella">5</div>
                 <div id="finJugador1"></div>
-                <div class="castilla cuatrocincos">6</div>                
+                <div class="casilla cuatrocincos">6</div>                
                 <div id="finJugador2"></div>
                  <div id="inicioJugador1"></div>
-                <div class="castilla cinco">7</div>
+                <div class="casilla cinco">7</div>
                 <div id="inicioJugador2"></div>
-                <div class="castilla ojos">8</div>
-                <div class="castilla estrella">9</div>
-                <div class="castilla ojos">10</div>
-                <div class="castilla cinco">11</div>
-                <div class="castilla cuatrocincos">12</div>
-                <div class="castilla cinco">13</div>
-                <div class="castilla ojos">14</div>
-                <div class="castilla cinco">15</div>
-                <div class="castilla ojos">16</div>
-                <div class="castilla estrella">17</div>
-                <div class="castilla fondo">18</div>
-                <div class="castilla estrella">19</div>
+                <div class="casilla ojos">8</div>
+                <div class="casilla estrella">9</div>
+                <div class="casilla ojos">10</div>
+                <div class="casilla cinco">11</div>
+                <div class="casilla cuatrocincos">12</div>
+                <div class="casilla cinco">13</div>
+                <div class="casilla ojos">14</div>
+                <div class="casilla cinco">15</div>
+                <div class="casilla ojos">16</div>
+                <div class="casilla estrella">17</div>
+                <div class="casilla fondo">18</div>
+                <div class="casilla estrella">19</div>
             </div>
 ```
 Estamos listo con la tabla verdad?
