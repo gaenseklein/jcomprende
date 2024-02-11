@@ -38,6 +38,10 @@ async function message (evento) {
         telon.style.display = "none";
         return; //close connection of ws directly in future
       }
+      if(data.action==='revoloteaDado'){
+        juegoUr.juegaDadosElOtro(data);
+        return; //close connection of ws directly in future
+      }
       if(data.action==='mensaje'){
         chatAnterior = misRespuestas.innerHTML
         misRespuestas.innerHTML = chatAnterior + '<br>' + data.nombre +": "+ data.texto;
@@ -55,16 +59,15 @@ function close () {
     console.log("linea 27 scriptwebs.js - WebSocket cerrado.");
 }
 
-function revoloteaDado () {
+function revoloteaDado (dados, imagenesDados, resultado, turno) {
         let dado = JSON.stringify({
           action:"revoloteaDado",
-          dado:nombre.value
+          turno: turno,
+          dados:dados,
+          imagenesDados: imagenesDados,
+          resultado: resultado
         });
-        miWebSocket.send(miNombre);
-
-        nombre.style.display = "none";
-        const espera = document.getElementById("espera");
-        espera.style.display = "block";
+        miWebSocket.send(dado);
     }
 
 function definirMiNombre (evento) {

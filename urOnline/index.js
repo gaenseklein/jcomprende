@@ -65,6 +65,19 @@ function onSocketConnect(ws) {
       return;
     }
 
+    if (data.action==='revoloteaDado') {
+      let saleDado = JSON.stringify(data);
+      let participa="";
+      if (data.turno==="1") {
+          participa=juego[1];
+          console.log('linea 73 index - participa es: ', participa);
+      } else {
+        participa=juego[0];
+          console.log('linea 76 index - participa es: ', participa);
+      }
+      participa.send(saleDado);
+    }
+
     if(data.action==='mensaje'){
         let saleMensaje = JSON.stringify(data);
         console.log("linea 67 index - ", data);
@@ -75,7 +88,7 @@ function onSocketConnect(ws) {
     }
 
 
-    message = message.slice(0, 50); // la longitud máxima del mensaje será 50
+    //message = message.slice(0, 50); // la longitud máxima del mensaje será 50
     console.log(`Mensaje recibido: ${message}`);
 
     // Enviar mensaje de vuelta al jugador
@@ -91,7 +104,7 @@ function onSocketConnect(ws) {
   ws.on('close', function () {
     const disconnectedjugadorWebSocket = ws; /* objeto WebSocket del jugador desconectado */
     // const disconnectedjugadorWebSocket = ws.id; /* objeto WebSocket del jugador desconectado */
-    jugadores.delete(disconnectedjugadorWebSocket);
+    juego.delete(disconnectedjugadorWebSocket);
     console.log('linea 52 index.js - ID de jugador desconectado: ', disconnectedjugadorWebSocket);
   });
 

@@ -94,6 +94,7 @@ juegoUr.animarDados = function(step, tiempo,dados){
 juegoUr.jugarDados = function(){
     var dados = [];
     var resultado = 0;
+    var imagenesDados = []
     for(var x=0;x<4;x++){
         dados[x] = Math.floor(Math.random()*2);
         resultado+=dados[x];
@@ -107,7 +108,9 @@ juegoUr.jugarDados = function(){
         nombreArchivo = nombreArchivo+Math.floor(Math.random()*3);
         nombreArchivo = nombreArchivo+".png";
         img.src="/public/files/"+nombreArchivo;
+        imagenesDados+=img.src;
     }
+    revoloteaDado(dados, imagenesDados, resultado, this.jugadorActual.id)
     this.animarDados(10,50,dados);
     setTimeout(function(){
     var enHtml = document.getElementById("dadosJuntos");
@@ -120,7 +123,6 @@ juegoUr.turno = function(){
   let dadosViejos = document.getElementById("dadosJuntos");
   dadosViejos.style.display="none";
   let dados = document.getElementById("dados");
-  dados.style.display="grid";
   if(this.jugadorActual===this.jugador1){
       dados.style.gridArea="dados1";
   }else{
@@ -132,6 +134,7 @@ juegoUr.turno = function(){
     console.log('linea 132 ur.js ', this.jugadorActual.nombre);
   if (this.jugadorActual.nombre===yoJugador) {
     console.log("turno y jugador son iguales");
+    dados.style.display="grid";
     this.jugarDados(); //ahora se actualizó los dados y los puntos para el turno actual
     if(this.dadosJuntos===0){
         //alert("oh, un 0... perdiste tu turno");
@@ -176,6 +179,23 @@ juegoUr.turno = function(){
      elementos[i].disabled = true;
    }
   }
+},
+
+juegoUr.juegaDadosElOtro = function(data){
+    let dados = document.getElementById("dados");
+    dados.style.display="grid";
+    var dadosJugados = data.dados;
+    var resultado = data.resultado;
+    for(var x=0;x<4;x++){
+        var img = document.getElementById("dado"+x);
+        img.src=data.imagenesDados[x];
+    }
+    this.animarDados(10,50,dadosJugados);
+    setTimeout(function(){
+    var enHtml = document.getElementById("dadosJuntos");
+    enHtml.innerText = data.resultado;
+    enHtml.style.display="grid";},1000);
+    this.dadosJuntos = data.resultado;
 },
 
 juegoUr.terminaTurno = function(texto){
