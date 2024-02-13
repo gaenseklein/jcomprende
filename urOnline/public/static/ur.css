@@ -10,6 +10,10 @@ body{
   text-align: center;
 }
 
+input, button{
+  cursor: pointer;
+}
+
 div#telon{
   width: 100vw;
   height: 100vh;
@@ -184,12 +188,17 @@ div#inicioJugador1 {
 
 button#desconectarse{
   display: block;
+  margin-top: 2vh;
+  justify-self: center;
 }
 
 button#jugarDeNuevo{
   display: block;
+  margin-top: 2vh;
+  justify-self: center;
 }
 
 div#botonDebotones{
   grid-area: botones;
+  display: grid;
 }

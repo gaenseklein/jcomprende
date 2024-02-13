@@ -120,6 +120,12 @@ juegoUr.jugarDados = function(){
 },
 
 juegoUr.turno = function(){
+  const esperaTurno = document.getElementById("esperaTurno");
+  esperaTurno.style.display = "none";
+  var activarElementos = document.querySelectorAll('button');
+  for (var i = 0; i < activarElementos.length; i++) {
+    activarElementos[i].disabled = false;
+  }
   let dadosViejos = document.getElementById("dadosJuntos");
   dadosViejos.style.display="none";
   let dados = document.getElementById("dados");
@@ -173,12 +179,11 @@ juegoUr.turno = function(){
     }
   }else {
     console.log("turno y jugador son diferentes");
-    const esperaTurno = document.getElementById("esperaTurno");
     esperaTurno.style.display = "block";
-      // Deshabilitar todos los elementos de entrada en la página
-   var elementos = document.querySelectorAll('button, select');
-   for (var i = 0; i < elementos.length; i++) {
-     elementos[i].disabled = true;
+      // Deshabilitar todos los elementos button (las piezas) en la página
+   var bloquearElementos = document.querySelectorAll('button');
+   for (var i = 0; i < bloquearElementos.length; i++) {
+     bloquearElementos[i].disabled = true;
    }
   }
 },
@@ -253,7 +258,7 @@ juegoUr.desconectarseOJugarDeNuevo=function(data){
   var jugarDeNuevo = document.getElementById("jugarDeNuevo");
   const telon = document.getElementById("telon");
   telon.style.display = "block";
-  telon.style.opacity = "0.5";
+  telon.style.opacity = "0.7";
   desconectarse.style.display = "block";
   jugarDeNuevo.style.display = "block";
   return;
@@ -363,7 +368,7 @@ juegoUr.crearPiezas = function(){
             posicion:-1, //empieza fuera del tablero
             jugador:jugador,
             casilla:null,
-            id:jugador+x,
+            id:x,
             html: this.crearHtmlParaPieza(x, jugador)
         };
         jugador.piezas.push(pieza);
@@ -376,29 +381,35 @@ juegoUr.crearPiezas = function(){
 
 //todos funciones de las piezas:
 var piezaClick = function(){
+    console.log('linea 380 - activo moverPieza()');
     moverPieza(juegoUr.dadosJuntos, juegoUr.jugadorActual.id, this.id);
+    juegoUr.piezaClickeada(this);
+  }
+
+juegoUr.piezaClickeada = function(data){
+  console.log('linea 385 - activo piezaClickeada(this) y data es: ', data);
     if(juegoUr.dadosJuntos===0)return; //si hay un 0 un click no hace nada
-    if(this.jugador!=juegoUr.jugadorActual)return; //no te mueves si no es tu turno
-    let pos = this.posicion;
+    if(data.jugador!=juegoUr.jugadorActual)return; //no te mueves si no es tu turno
+    let pos = data.posicion;
     let futuroPos = pos + juegoUr.dadosJuntos;
-    if(futuroPos>=this.jugador.camino.length)return; //no se puede mover fuera del camino, hay que llegar justo al final
+    if(futuroPos>=data.jugador.camino.length)return; //no se puede mover fuera del camino, hay que llegar justo al final
 
     //la casilla a donde queremos mover:
-    let futurocasilla = this.jugador.camino[futuroPos];
+    let futurocasilla = data.jugador.camino[futuroPos];
     //pero si es una estrella y ocupada por otro, movemos a la siguiente
-    if(futurocasilla.puedeEntrar(this)===false  && futurocasilla.estrella===true
-        && futurocasilla.ocupante.jugador!=this.jugador){
+    if(futurocasilla.puedeEntrar(data)===false  && futurocasilla.estrella===true
+        && futurocasilla.ocupante.jugador!=data.jugador){
         futuroPos++;
-        futurocasilla = this.jugador.camino[futuroPos];
+        futurocasilla = data.jugador.camino[futuroPos];
     }
-    if(futurocasilla.puedeEntrar(this)===true){
-        this.posicion = futuroPos;
-        futurocasilla.entraPieza(this);
-        if(this.casilla!=null)this.casilla.ocupante=null; //liberamos la casilla que estábamos ocupando
-        this.casilla=futurocasilla; //memorizamos la casilla donde estábamos
+    if(futurocasilla.puedeEntrar(data)===true){
+        data.posicion = futuroPos;
+        futurocasilla.entraPieza(data);
+        if(data.casilla!=null)data.casilla.ocupante=null; //liberamos la casilla que estábamos ocupando
+        data.casilla=futurocasilla; //memorizamos la casilla donde estábamos
         //estamos listo por aqui.
         //si estamos en estrella ahora tenemos otro turno, sino termina el turno:
-        if(this.casilla.estrella === true){
+        if(data.casilla.estrella === true){
             setTimeout(function(){
                 alert("buenisimo! tienes otro turno "+juegoUr.jugadorActual.nombre);
                 juegoUr.turno();
@@ -411,11 +422,25 @@ var piezaClick = function(){
 };
 
 juegoUr.piezaClickWs = function(data){
-  let piezaAmover = juegoUr.piezas.find(element => element===data.idPieza);
+  let piezaAmover=null;
+  console.log('juegoUr.piezas es: ',juegoUr.piezas);
+  for (let i = 0; i < juegoUr.piezas.length; i++) {
+    console.log('juegoUr.piezas[i].id es: ', juegoUr.piezas[i].id);
+    if (juegoUr.piezas[i].id===data.idPieza) {
+    console.log('linea 419 - juegoUr.piezas[i] es:', juegoUr.piezas[i]);
+      piezaAmover=juegoUr.piezas[i];
+      console.log('linea 427 - piezaAmover es: ', piezaAmover);
+      break;
+    }
+  };
   console.log('piezaAmover es: ', piezaAmover);
     juegoUr.dadosJuntos = data.resultado;
-    juegoUr.jugadorActual = piezaAmover.jugador;
-    piezaAmover=piezaClick;
+    if(data.turno===1){
+        this.jugadorActual = this.jugador1;
+    }else{
+        this.jugadorActual=this.jugador2;
+    }
+    juegoUr.piezaClickeada(piezaAmover);
 };
 
 juegoUr.crearHtmlParaPieza = function(numero, jugador){

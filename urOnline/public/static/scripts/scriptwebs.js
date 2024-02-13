@@ -167,7 +167,7 @@ function desconeccion (id, nombre) {
       });
       miWebSocket.send(meDesconecto);
       miWebSocket.close();
-      res.redirect('/');
+      window.location.href = "http://www.uronline.com";
 }
 
 function nuevoJuego (id, nombre) {
