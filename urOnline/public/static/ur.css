@@ -201,4 +201,5 @@ button#jugarDeNuevo{
 div#botonDebotones{
   grid-area: botones;
   display: grid;
+  z-index: 5;
 }

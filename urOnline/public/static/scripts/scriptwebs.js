@@ -76,12 +76,12 @@ async function message (message) {
 
 function error (evento) {
     // Ha ocurrido un error
-    console.error("linea 54 scriptwebs.js - WebSocket ha observado un error: ", evento);
+    console.error("linea 79 scriptwebs.js - WebSocket ha observado un error: ", evento);
 }
 
 function close () {
     // Cierra la conexión
-    console.log("linea 59 scriptwebs.js - WebSocket cerrado.");
+    console.log("linea 84 scriptwebs.js - WebSocket cerrado.");
 }
 
 function revoloteaDado (dados, imagenesDados, resultado, turno) {
@@ -183,7 +183,7 @@ function nuevoJuego (id, nombre) {
       });
       miWebSocket.send(miNombre);
       telon.style.display = "block";
-      telon.style.opacity = "1";
+      telon.style.backgroundColor = "rgb(255 255 255 / 75%)";
       espera.style.display = "block";
 }
 

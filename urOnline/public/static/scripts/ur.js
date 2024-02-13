@@ -16,7 +16,7 @@ juegoUr.init = function(){
 },
 
 juegoUr.initJuego = function(){
-    console.log('linea 18 ur.js');
+    console.log('linea 19 ur.js - inicia initJuego()');
     this.casillas = this.crearcasillas();
     this.crearPiezas();
     this.initJugadores();

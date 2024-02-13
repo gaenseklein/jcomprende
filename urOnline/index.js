@@ -87,8 +87,9 @@ function onSocketConnect(ws) {
         }
       }
       if(data.action==='mensaje'){
+        let mensajeJson = JSON.stringify(data)
           for (let jugador of clientes) {
-            jugador.send(message);
+            jugador.send(mensajeJson);
       }
       return;
     }
@@ -96,7 +97,11 @@ function onSocketConnect(ws) {
 
   // Manejar cierre de conexión
   ws.on('close', function () {
+    console.log("linea 99 index - clientes es : ", clientes.length);
+    console.log("linea 100 index - clientes es : ", clientes);
     clientes.delete(ws);
+    console.log("linea 102 index - clientes es : ", clientes.length);
+    console.log("linea 103 index - clientes es : ", clientes);
   });
 };
 
