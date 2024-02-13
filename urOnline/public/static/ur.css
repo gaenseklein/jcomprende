@@ -3,7 +3,7 @@ body{
   grid-template-areas: "jugador1 mesa jugador2"
                       "dados1 mesa dados2"
                       "chat mesa nada"
-                      "respuestas alerta nada";
+                      "respuestas alerta botones";
   grid-template-columns: 20% 60% 20%;
   font-size: xx-large;
   color: blue;
@@ -180,4 +180,16 @@ div#inicioJugador1 {
 #esperaTurno{
   grid-area: alerta;
   display: none;
+}
+
+button#desconectarse{
+  display: block;
+}
+
+button#jugarDeNuevo{
+  display: block;
+}
+
+div#botonDebotones{
+  grid-area: botones;
 }

@@ -4,7 +4,7 @@ const app = express();
 const http = require('http');
 
 const jugadores = {jugador1:"", jugador2:""};
-const juego = [];
+const clientes = new Set();
 
 const WebSocket = require('ws');
 const server = http.createServer(app);
@@ -16,107 +16,88 @@ http.createServer((req, res) => {
   wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onSocketConnect);
 });
 
+
 // Cuando un nuevo jugador se conecta
 function onSocketConnect(ws) {
-  juego.push(ws);
+  clientes.add(ws);
   console.log('linea 22 index.js - nuevo jugador conectado');
-
-  // ws.sendToRoom = function(message,excludeSelf){
-  //     // console.log("sending to room:",message);
-  //         for(var x=0;x<rooms[this.room].length;x++){
-  //             if(excludeSelf && rooms[this.room][x] === this)continue;
-  //             msg = message;
-  //             if(typeof msg!="string")msg = JSON.stringify(message);
-  //             rooms[this.room][x].send(msg);
-  //         }
-  //}
 
   // Manejar mensajes del jugador
   ws.on('message', function (message) {
-    let data;
-    try {
-      console.log("linea 38 index");
-        data = JSON.parse(message);
-        console.log("linea 41 index");
-    }catch(e){
-       console.log(e);
-        console.log("malformed message - no JSON");
-        return;
-    }
-    if(data.action===undefined){
-        console.error("action not defined");
-        return; //close connection of ws directly in future
-    }
-    if(data.action==='nombre'){
-      if (jugadores.jugador1==="") {
-          jugadores.jugador1=data.nombre;
-      } else {
-        jugadores.jugador2=data.nombre;
-        if (jugadores.jugador1===jugadores.jugador2) {
-          jugadores.jugador2=data.nombre+"*";
+      let data;
+      try {
+          data = JSON.parse(message);
+          console.log("linea 41 index", data);
+      }catch(e){
+         console.log(e);
+          console.log("malformed message - no JSON");
+          return;
+      }
+      if(data.action===undefined){
+          console.error("action not defined");
+          return; //close connection of ws directly in future
+      }
+      if(data.action==='nombre'){
+        if (jugadores.jugador1==="") {
+            jugadores.jugador1=data.nombre;
+        } else {
+          jugadores.jugador2=data.nombre;
+          if (jugadores.jugador1===jugadores.jugador2) {
+            jugadores.jugador2=data.nombre+"*";
+          }
+          let nombres = JSON.stringify({action:'nombre', nombre1:jugadores.jugador1, nombre2:jugadores.jugador2});
+          for (let jugador of clientes) {
+            jugador.send(nombres);
         }
-        console.log("linea 58 index");
-        let nombres = JSON.stringify({action:'nombre', nombre1:jugadores.jugador1, nombre2:jugadores.jugador2});
-        for (let jugador of juego) {
-          jugador.send(nombres);
-        //ws.send(nombres);
       }
-    }
+        return;
+      }
+      if (data.turno) {
+        let receptor = {};
+        clientes.forEach((cliente) => {
+          // Verificar si el cliente actual no es el que envió el mensaje
+          if (cliente !== ws) {
+            // Enviar el mensaje al cliente actual
+            receptor=cliente;
+          }
+        });
+        if (data.action==='revoloteaDado') {
+          let tiraDados = JSON.stringify(data)
+          receptor.send(tiraDados);
+        }
+        if (data.action==='mueveLaPieza') {
+          let muevePieza = JSON.stringify(data)
+          receptor.send(muevePieza);
+        }
+        if (data.action==='perdioTurno') {
+          let pierdeTurno = JSON.stringify(data)
+          receptor.send(pierdeTurno);
+        }
+        if (data.action==='terminaJuego') {
+          let terminoJuego = JSON.stringify(data)
+          receptor.send(terminoJuego);
+        }
+        if (data.action==='meDesconecto') {
+          let desconectado = JSON.stringify(data)
+          receptor.send(desconectado);
+        }
+        if (data.action==='juegoDeNuevo') {
+          let jugamosdeNuevo = JSON.stringify(data)
+          receptor.send(jugamosdeNuevo);
+        }
+      }
+      if(data.action==='mensaje'){
+          for (let jugador of clientes) {
+            jugador.send(message);
+      }
       return;
-    }
-
-    if (data.action==='revoloteaDado') {
-      let saleDado = JSON.stringify(data);
-      let participa="";
-      if (data.turno==="1") {
-          participa=juego[1];
-          console.log('linea 73 index - participa es: ', participa);
-      } else {
-        participa=juego[0];
-          console.log('linea 76 index - participa es: ', participa);
-      }
-      participa.send(saleDado);
-    }
-
-    if(data.action==='mensaje'){
-        let saleMensaje = JSON.stringify(data);
-        console.log("linea 67 index - ", data);
-        for (let jugador of juego) {
-          jugador.send(saleMensaje);
-      }
-      return;
-    }
-
-
-    //message = message.slice(0, 50); // la longitud máxima del mensaje será 50
-    console.log(`Mensaje recibido: ${message}`);
-
-    // Enviar mensaje de vuelta al jugador
-    ws.send(`Servidor dice: ${message}`);
-
-    //Puedes enviar el mensaje a todos los jugadores conectados
-    for (let jugador of juego) {
-      jugador.send(message);
     }
   });
 
   // Manejar cierre de conexión
   ws.on('close', function () {
-    const disconnectedjugadorWebSocket = ws; /* objeto WebSocket del jugador desconectado */
-    // const disconnectedjugadorWebSocket = ws.id; /* objeto WebSocket del jugador desconectado */
-    juego.delete(disconnectedjugadorWebSocket);
-    console.log('linea 52 index.js - ID de jugador desconectado: ', disconnectedjugadorWebSocket);
+    clientes.delete(ws);
   });
-
-  // Obtener el número total de jugadores conectados
-  // function numeroDeJugadores(juego) {
-  //   let contador = 0;
-  //   for (const jugadores of juego) {
-  //     contador += 1;
-  //   }
-  //   console.log('linea 94 index.js - jugadores conectados: ', contador);
-  //   return
-  // }
 };
 
 //Import routes

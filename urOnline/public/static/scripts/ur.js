@@ -108,9 +108,9 @@ juegoUr.jugarDados = function(){
         nombreArchivo = nombreArchivo+Math.floor(Math.random()*3);
         nombreArchivo = nombreArchivo+".png";
         img.src="/public/files/"+nombreArchivo;
-        imagenesDados+=img.src;
+        imagenesDados[x]=img.src;
     }
-    revoloteaDado(dados, imagenesDados, resultado, this.jugadorActual.id)
+    revoloteaDado(dados, imagenesDados, resultado, this.jugadorActual.id);
     this.animarDados(10,50,dados);
     setTimeout(function(){
     var enHtml = document.getElementById("dadosJuntos");
@@ -140,6 +140,7 @@ juegoUr.turno = function(){
         //alert("oh, un 0... perdiste tu turno");
         //this.terminaTurno(); //no hay más que hacer en un 0
         setTimeout("juegoUr.terminaTurno('oooh, un 0... perdiste tu turno')",2000);
+        cartelAlertPerdioTurnoPor0(this.jugadorActual.id, this.jugadorActual.nombre);
         return;
     }
     //chequear si hay movimientos posibles. sino termina turno
@@ -168,6 +169,7 @@ juegoUr.turno = function(){
     }
     if(posible===false){
         setTimeout("juegoUr.terminaTurno('ooooh... no hay movimientos posibles... perdiste tu turno '+juegoUr.jugadorActual.nombre);",800);
+        cartelAlertPerdioTurnoPorNoMovimiento(this.jugadorActual.id, this.jugadorActual.nombre);
     }
   }else {
     console.log("turno y jugador son diferentes");
@@ -198,6 +200,16 @@ juegoUr.juegaDadosElOtro = function(data){
     this.dadosJuntos = data.resultado;
 },
 
+juegoUr.cartelPierdeTurnoPor0Ws = function(data){
+    setTimeout("juegoUr.terminaTurno(data.nombre+' sacó un 0... pierde el turno')",2000);
+    return;
+}
+
+juegoUr.cartelPierdeTurnoPorNoMovimientoWs = function(data){
+    setTimeout("juegoUr.terminaTurno(data.nombre+' no tiene movimientos posibles... pierde el turno')",2000);
+    return;
+}
+
 juegoUr.terminaTurno = function(texto){
     if(texto)alert(texto);
     //chequear si todos estan al fin:
@@ -226,17 +238,58 @@ juegoUr.terminaTurno = function(texto){
 },
 
 juegoUr.terminaJuego = function(){
-    alert(juegoUr.jugadorActual.nombre + " ganó el juego");
-    let cualGano = juegoUr.jugadorActual;
-    this.initJuego();
-    if(cualGano===juegoUr.jugador1){
-        juegoUr.terminaTurno();
-    }
+    alert("¡Felicidades " + juegoUr.jugadorActual.nombre + ", has ganado el juego!");
+    cartelTerminaJuego(this.jugadorActual.id, this.jugadorActual.nombre);
+    juegoUr.desconectarseOJugarDeNuevo();
 },
 
+juegoUr.terminaJuegoWs = function(data){
+    alert("¡" + data.nombre + " ganó el juego!");
+    juegoUr.desconectarseOJugarDeNuevo();
+},
+
+juegoUr.desconectarseOJugarDeNuevo=function(data){
+  var desconectarse = document.getElementById("desconectarse");
+  var jugarDeNuevo = document.getElementById("jugarDeNuevo");
+  const telon = document.getElementById("telon");
+  telon.style.display = "block";
+  telon.style.opacity = "0.5";
+  desconectarse.style.display = "block";
+  jugarDeNuevo.style.display = "block";
+  return;
+}
+
+juegoUr.meDesconecto = function(){
+  const miNombre = document.getElementById("nombre");
+  if (juegoUr.jugador1.nombre===miNombre.value) {
+    desconeccion(juegoUr.jugador1.id, juegoUr.jugador1.nombre);
+  } else {
+    desconeccion(juegoUr.jugador2.id, juegoUr.jugador2.nombre);
+  }
+}
+
+juegoUr.jugarDeNuevo = function(){
+  const miNombre = document.getElementById("nombre");
+  if (juegoUr.jugador1.nombre===miNombre.value) {
+    nuevoJuego(juegoUr.jugador1.id, juegoUr.jugador1.nombre);
+  } else {
+    nuevoJuego(juegoUr.jugador2.id, juegoUr.jugador2.nombre);
+  }
+}
+
+juegoUr.meDesconectoWs=function(data){
+  alert(data.nombre + " se ha desconectado");
+  juegoUr.desconectarseOJugarDeNuevo();
+  return;
+}
+
+juegoUr.jugarDeNuevoWs=function(data){
+  alert(data.nombre + " quiere jugar de nuevo");
+  juegoUr.desconectarseOJugarDeNuevo();
+  return;
+}
+
 juegoUr.initJugadores = function(){
-    // this.jugador1.caminoEnNumeros = [8,11,14,17,18,15,12,9,7,6,4,1,0,3];
-    // this.jugador2.caminoEnNumeros = [10,13,16,19,18,15,12,9,7,6,4,1,2,5];
     this.jugador1.caminoEnNumeros = [12,15,18,21,22,19,16,13,10,7,4,1,0,3];
     this.jugador2.caminoEnNumeros = [14,17,20,23,22,19,16,13,10,7,4,1,2,5];
     this.jugador1.camino = [];
@@ -310,6 +363,7 @@ juegoUr.crearPiezas = function(){
             posicion:-1, //empieza fuera del tablero
             jugador:jugador,
             casilla:null,
+            id:jugador+x,
             html: this.crearHtmlParaPieza(x, jugador)
         };
         jugador.piezas.push(pieza);
@@ -318,8 +372,11 @@ juegoUr.crearPiezas = function(){
     }
 };
 
+
+
 //todos funciones de las piezas:
 var piezaClick = function(){
+    moverPieza(juegoUr.dadosJuntos, juegoUr.jugadorActual.id, this.id);
     if(juegoUr.dadosJuntos===0)return; //si hay un 0 un click no hace nada
     if(this.jugador!=juegoUr.jugadorActual)return; //no te mueves si no es tu turno
     let pos = this.posicion;
@@ -351,6 +408,14 @@ var piezaClick = function(){
             juegoUr.terminaTurno();
         }
     }
+};
+
+juegoUr.piezaClickWs = function(data){
+  let piezaAmover = juegoUr.piezas.find(element => element===data.idPieza);
+  console.log('piezaAmover es: ', piezaAmover);
+    juegoUr.dadosJuntos = data.resultado;
+    juegoUr.jugadorActual = piezaAmover.jugador;
+    piezaAmover=piezaClick;
 };
 
 juegoUr.crearHtmlParaPieza = function(numero, jugador){

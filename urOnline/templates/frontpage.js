@@ -57,16 +57,17 @@ const template = function(dataFrontpage){
       </div>
 
       <input type="text" id="nuevoMensaje" placeholder="Escribe un mensaje">
-      <!-- <button onclick="enviarMensaje()">Enviar</button>-->
+      <!-- <button onclick="enviarMensaje()">Enviar</button> -->
       <!-- div with messages -->
       <div id="respuestas"></div>
       <h4 id="esperaTurno">Espera a que tu oponente haga su jugada</h4>
-
-
-
-      <script src="/public/static/scripts/ur.js"></script>
-      <script src="/public/static/scripts/scriptwebs.js"></script>
+      <div id="botonDebotones">
+        <button type="button" name="button" onclick="juegoUr.meDesconecto()" id="desconectarse">Desconectarse</button>
+        <button type="button" name="button" onclick="juegoUr.jugarDeNuevo()" id="jugarDeNuevo">Jugar de Nuevo</button>
+      </div>
     </body>
+    <script src="/public/static/scripts/ur.js"></script>
+    <script src="/public/static/scripts/scriptwebs.js"></script>
   </html>
 
   `;
