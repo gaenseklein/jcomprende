@@ -2,32 +2,31 @@
 const express = require('express'); //biblioteca que construye un servidor
 const app = express();
 const http = require('http');
-
-const jugadores = {jugador1:"", jugador2:""};
-const clientes = new Set();
-
 const WebSocket = require('ws');
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
-wss.on('connection', onSocketConnect);
+const listaJugadores = [];
+let jugadorEnEspera = 'false';
 
 http.createServer((req, res) => {
   wss.handleUpgrade(req, req.socket, Buffer.alloc(0), onSocketConnect);
 });
 
-
 // Cuando un nuevo jugador se conecta
-function onSocketConnect(ws) {
-  clientes.add(ws);
-  console.log('linea 22 index.js - nuevo jugador conectado');
-
+wss.on('connection', function onSocketConnect(ws) {
+  ws.estado='conectado';
+  ws.nombre='';
+  let mandoMensaje=ws;
+  listaJugadores.push(ws);
+  console.log('linea 23 index.js - nuevo jugador conectado');
+  console.log('linea 24 index.js - listaJugadores.length: ', listaJugadores.length);
   // Manejar mensajes del jugador
-  ws.on('message', function (message) {
+  ws.on('message', async function (message) {
       let data;
       try {
           data = JSON.parse(message);
-          console.log("linea 41 index", data);
+          console.log("linea 30 index", data);
       }catch(e){
          console.log(e);
           console.log("malformed message - no JSON");
@@ -38,72 +37,75 @@ function onSocketConnect(ws) {
           return; //close connection of ws directly in future
       }
       if(data.action==='nombre'){
-        if (jugadores.jugador1==="") {
-            jugadores.jugador1=data.nombre;
+        let nombre=data.nombre;
+        let busquedaNombre=listaJugadores.find((jugadorViejo)=>jugadorViejo.nombre === nombre);
+        if(busquedaNombre===undefined){
+          let respuestaAlNombre=JSON.stringify({action:'nombreDisponible'});
+          mandoMensaje.send(respuestaAlNombre);
         } else {
-          jugadores.jugador2=data.nombre;
-          if (jugadores.jugador1===jugadores.jugador2) {
-            jugadores.jugador2=data.nombre+"*";
-          }
-          let nombres = JSON.stringify({action:'nombre', nombre1:jugadores.jugador1, nombre2:jugadores.jugador2});
-          for (let jugador of clientes) {
-            jugador.send(nombres);
+          let respuestaAlNombre=JSON.stringify({action:'nombreNoDisponible'});
+          mandoMensaje.send(respuestaAlNombre);
+          return
         }
-      }
+        if (jugadorEnEspera==='false') {
+          jugadorEnEspera='true';
+          ws.estado='enEspera';
+          ws.nombre=data.nombre;
+          console.log('linea 55 index.js - jugador '+ ws.nombre +' ahora en espera');
+          return;
+        } else {
+          let cifraAzar=Math.floor(Math.random()*10000);
+          ws.nombre=data.nombre;
+          ws.estado='jugador2-partido'+cifraAzar;
+          console.log('linea 61 index - estado del jugador: ', ws.estado);
+          ws.partido=cifraAzar;
+          let busquedaJugadorEnEspera=listaJugadores.find((jugadorEsperando)=>jugadorEsperando.estado === "enEspera");
+          console.log('linea 63 index - habia jugador en espera: ', busquedaJugadorEnEspera.nombre);
+          busquedaJugadorEnEspera.estado='jugador1-partido'+cifraAzar;
+          busquedaJugadorEnEspera.partido=cifraAzar;
+          jugadorEnEspera='false';
+          let nombres = {action:'nombre', partido:ws.partido, nombre1:busquedaJugadorEnEspera.nombre, nombre2:ws.nombre};
+          let buscarPartidoNombre=listaJugadores.filter((jugadoresDelPartido)=>jugadoresDelPartido.partido == ws.partido);
+          mensajeParaTodes=JSON.stringify(nombres);
+          buscarPartidoNombre.forEach((jugador) => {
+            jugador.send(mensajeParaTodes);
+            });
+          return;
+          }
+        }
+      if(data.action==='mensaje'){
+        let saleMensaje = JSON.stringify(data);
+        let buscarPartidoMensaje=listaJugadores.filter((jugadoresDelPartido)=>jugadoresDelPartido.partido == data.partido);
+        buscarPartidoMensaje.forEach((jugador) => {
+          jugador.send(saleMensaje);
+          });
         return;
       }
       if (data.turno) {
+        let mandaData = JSON.stringify(data);
         let receptor = {};
-        clientes.forEach((cliente) => {
-          // Verificar si el cliente actual no es el que envió el mensaje
-          if (cliente !== ws) {
-            // Enviar el mensaje al cliente actual
-            receptor=cliente;
+        console.log('linea 86 index.js - data.partido es: ', data.partido);
+        let jugadorDelPartido=listaJugadores.filter((jugadoresOponentes) => jugadoresOponentes.partido==data.partido);
+          // Verificar cual es el que envió el mensaje
+        if (jugadorDelPartido[0] != ws) {
+            // Enviar el mensaje al jugador actual
+            receptor=jugadorDelPartido[0];
+          } else {
+            receptor=jugadorDelPartido[1];
           }
-        });
-        if (data.action==='revoloteaDado') {
-          let tiraDados = JSON.stringify(data)
-          receptor.send(tiraDados);
-        }
-        if (data.action==='mueveLaPieza') {
-          let muevePieza = JSON.stringify(data)
-          receptor.send(muevePieza);
-        }
-        if (data.action==='perdioTurno') {
-          let pierdeTurno = JSON.stringify(data)
-          receptor.send(pierdeTurno);
-        }
-        if (data.action==='terminaJuego') {
-          let terminoJuego = JSON.stringify(data)
-          receptor.send(terminoJuego);
-        }
-        if (data.action==='meDesconecto') {
-          let desconectado = JSON.stringify(data)
-          receptor.send(desconectado);
-        }
-        if (data.action==='juegoDeNuevo') {
-          let jugamosdeNuevo = JSON.stringify(data)
-          receptor.send(jugamosdeNuevo);
-        }
+        receptor.send(mandaData);
       }
-      if(data.action==='mensaje'){
-        let mensajeJson = JSON.stringify(data)
-          for (let jugador of clientes) {
-            jugador.send(mensajeJson);
-      }
-      return;
-    }
-  });
+    });
 
-  // Manejar cierre de conexión
+    // Manejar cierre de conexión
   ws.on('close', function () {
-    console.log("linea 99 index - clientes es : ", clientes.length);
-    console.log("linea 100 index - clientes es : ", clientes);
-    clientes.delete(ws);
-    console.log("linea 102 index - clientes es : ", clientes.length);
-    console.log("linea 103 index - clientes es : ", clientes);
+    const index = listaJugadores.indexOf(ws);
+    if (index > -1) {
+      listaJugadores.splice(index, 1);
+    }
+    console.log('linea 91 index.js - jugador '+data.nombre+' desconectado');
   });
-};
+});
 
 //Import routes
 const fpRoute = require('./routes/urRoute');
@@ -122,7 +124,6 @@ app.use('/public/static/scripts', express.static('/public/static/scripts/', {
     }
   },
 }));
-
 
 const PORT = 4500;
 app.listen(PORT,() => console.log('server up and running at port ',PORT));

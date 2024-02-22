@@ -27,7 +27,7 @@ input#nombre{
   width: 50vw;
 }
 
-#espera{
+#espera, #nombreIncorrecto, #partidoNumero{
   display: none;
 }
 
@@ -201,5 +201,4 @@ button#jugarDeNuevo{
 div#botonDebotones{
   grid-area: botones;
   display: grid;
-  z-index: 5;
 }
