@@ -1,7 +1,3 @@
-// window.addEventListener('load', function() {
-//     juegoUr.initJuego();
-// });
-
 juegoUr = {};
 
 juegoUr.init = function(){
@@ -110,7 +106,7 @@ juegoUr.jugarDados = function(){
         img.src="/public/files/"+nombreArchivo;
         imagenesDados[x]=img.src;
     }
-    revoloteaDado(dados, imagenesDados, resultado, this.jugadorActual.id);
+    jugadorMandaMensajeAlServidor.revoloteaDado(dados, imagenesDados, resultado, this.jugadorActual.id);
     this.animarDados(10,50,dados);
     setTimeout(function(){
     var enHtml = document.getElementById("dadosJuntos");
@@ -146,7 +142,7 @@ juegoUr.turno = function(){
         //alert("oh, un 0... perdiste tu turno");
         //this.terminaTurno(); //no hay más que hacer en un 0
         setTimeout("juegoUr.terminaTurno('oooh, un 0... perdiste tu turno')",2000);
-        cartelAlertPerdioTurnoPor0(this.jugadorActual.id, this.jugadorActual.nombre);
+        jugadorMandaMensajeAlServidor.cartelAlertPerdioTurnoPor0(this.jugadorActual.id, this.jugadorActual.nombre);
         return;
     }
     //chequear si hay movimientos posibles. sino termina turno
@@ -175,7 +171,7 @@ juegoUr.turno = function(){
     }
     if(posible===false){
         setTimeout("juegoUr.terminaTurno('ooooh... no hay movimientos posibles... perdiste tu turno '+juegoUr.jugadorActual.nombre);",800);
-        cartelAlertPerdioTurnoPorNoMovimiento(this.jugadorActual.id, this.jugadorActual.nombre);
+        jugadorMandaMensajeAlServidor.cartelAlertPerdioTurnoPorNoMovimiento(this.jugadorActual.id, this.jugadorActual.nombre);
     }
   }else {
     console.log("turno y jugador son diferentes");
@@ -206,12 +202,13 @@ juegoUr.juegaDadosElOtro = function(data){
 },
 
 juegoUr.cartelPierdeTurnoPor0Ws = function(data){
-    setTimeout("juegoUr.terminaTurno(data.nombre+' sacó un 0... pierde el turno')",2000);
+    setTimeout("juegoUr.terminaTurno(data.nombre +' sacó un 0... pierde el turno')",2000);
     return;
 }
 
 juegoUr.cartelPierdeTurnoPorNoMovimientoWs = function(data){
-    setTimeout("juegoUr.terminaTurno(data.nombre+' no tiene movimientos posibles... pierde el turno')",2000);
+    console.log('linea 212 index - nombre del jugador que no tiene movimientos: ', nombre);
+    setTimeout("juegoUr.terminaTurno(data.nombre +' no tiene movimientos posibles... pierde el turno')",2000);
     return;
 }
 
@@ -244,7 +241,7 @@ juegoUr.terminaTurno = function(texto){
 
 juegoUr.terminaJuego = function(){
     alert("¡Felicidades " + juegoUr.jugadorActual.nombre + ", has ganado el juego!");
-    cartelTerminaJuego(this.jugadorActual.id, this.jugadorActual.nombre);
+    jugadorMandaMensajeAlServidor.cartelTerminaJuego(this.jugadorActual.id, this.jugadorActual.nombre);
     juegoUr.desconectarseOJugarDeNuevo();
 },
 
@@ -256,30 +253,49 @@ juegoUr.terminaJuegoWs = function(data){
 juegoUr.desconectarseOJugarDeNuevo=function(data){
   var desconectarse = document.getElementById("desconectarse");
   var jugarDeNuevo = document.getElementById("jugarDeNuevo");
-  const telon = document.getElementById("telon");
+  var reiniciarPartido = document.getElementById("reiniciarPartido");
+  var telon = document.getElementById("telon");
+  var mesa = document.getElementById("mesa");
+  var dados = document.getElementById("dados");
   telon.style.display = "block";
+  jugarDeNuevo.style.display = "none";
+  mesa.style.opacity = "0.5";
+  dados.style.opacity = "0.5";
   telon.style.opacity = "0.7";
   desconectarse.style.display = "block";
-  jugarDeNuevo.style.display = "block";
+  reiniciarPartido.style.display = "block";
+  desconectarse.style.zIndex = '7';
+  reiniciarPartido.style.zIndex = '7';
+  esperaTurno.style.display = "none";
+  desconectarse.disabled = false;
+  reiniciarPartido.disabled = false;
   return;
 }
 
 juegoUr.meDesconecto = function(){
-  const miNombre = document.getElementById("nombre");
-  if (juegoUr.jugador1.nombre===miNombre.value) {
-    desconeccion(juegoUr.jugador1.id, juegoUr.jugador1.nombre);
-  } else {
-    desconeccion(juegoUr.jugador2.id, juegoUr.jugador2.nombre);
-  }
+  let miId = document.getElementById("idJugador");
+  jugadorMandaMensajeAlServidor.desconeccion(miId);
 }
 
 juegoUr.jugarDeNuevo = function(){
   const miNombre = document.getElementById("nombre");
   if (juegoUr.jugador1.nombre===miNombre.value) {
-    nuevoJuego(juegoUr.jugador1.id, juegoUr.jugador1.nombre);
+    jugadorMandaMensajeAlServidor.nuevoJuego(juegoUr.jugador1.nombre);
   } else {
-    nuevoJuego(juegoUr.jugador2.id, juegoUr.jugador2.nombre);
+    jugadorMandaMensajeAlServidor.nuevoJuego(juegoUr.jugador2.nombre);
   }
+    var jugarDeNuevo = document.getElementById("jugarDeNuevo");
+    var telon = document.getElementById("telon");
+    telon.style.display = "block";
+    telon.style.opacity = "1";
+    nombre.style.display = "none";
+    espera.style.display = "block";
+    jugarDeNuevo.style.display = "none";
+    nombreIncorrecto.style.display = "none";
+}
+
+juegoUr.reiniciarPartido=function(){
+
 }
 
 juegoUr.meDesconectoWs=function(data){
@@ -381,8 +397,8 @@ juegoUr.crearPiezas = function(){
 
 //todos funciones de las piezas:
 var piezaClick = function(){
-    console.log('linea 380 - activo moverPieza()');
-    moverPieza(juegoUr.dadosJuntos, juegoUr.jugadorActual.id, this.id);
+    console.log('linea 380 - activo jugadorMandaMensajeAlServidor.moverPieza()');
+    jugadorMandaMensajeAlServidor.moverPieza(juegoUr.dadosJuntos, juegoUr.jugadorActual.id, this.id);
     juegoUr.piezaClickeada(this);
   }
 

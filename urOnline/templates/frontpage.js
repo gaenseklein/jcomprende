@@ -22,6 +22,7 @@ const template = function(dataFrontpage){
         <h2 id="nombre2">Jugador 2</h2>
       </div>
       <p id="partidoNumero"></p>
+      <p id='idJugador'></p>
       <div id="dados">
         <img id="dado0" src="/public/files/dadoa0.png">
         <img id="dado1" src="/public/files/dadoa1.png">
@@ -66,6 +67,7 @@ const template = function(dataFrontpage){
       <div id="botonDebotones">
         <button type="button" name="button" onclick="juegoUr.meDesconecto()" id="desconectarse">Desconectarse</button>
         <button type="button" name="button" onclick="juegoUr.jugarDeNuevo()" id="jugarDeNuevo">Jugar de Nuevo</button>
+        <button type="button" name="button" onclick="juegoUr.reiniciarPartido()" id="reiniciarPartido">Reiniciar el Partido</button>
       </div>
     </body>
     <script src="/public/static/scripts/ur.js"></script>

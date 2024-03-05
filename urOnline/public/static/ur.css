@@ -27,7 +27,7 @@ input#nombre{
   width: 50vw;
 }
 
-#espera, #nombreIncorrecto, #partidoNumero{
+#espera, #nombreIncorrecto, #partidoNumero, #idJugador{
   display: none;
 }
 
@@ -186,13 +186,7 @@ div#inicioJugador1 {
   display: none;
 }
 
-button#desconectarse{
-  display: block;
-  margin-top: 2vh;
-  justify-self: center;
-}
-
-button#jugarDeNuevo{
+button#desconectarse, button#jugarDeNuevo, button#reiniciarPartido{
   display: block;
   margin-top: 2vh;
   justify-self: center;
