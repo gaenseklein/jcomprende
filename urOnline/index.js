@@ -7,7 +7,6 @@ const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
 
 const listaJugadores = [];
-// let jugador={};
 let jugadorEnEspera = 'false';
 
 http.createServer((req, res) => {
@@ -30,10 +29,10 @@ wss.on('connection', function onSocketConnect(ws) {
       break;
       }
     }
-    if (jugadorNuevo) {
+    if (jugadorNuevo.id) {
       listaJugadores.push(jugadorNuevo);
     } else {
-      console.log('No se pudo encontrar un id único después de 100 intentos.');
+      console.log('Lo siento, no se encontró un id único después de 100 intentos.');
     }
   console.log('linea 104 index - listaJugadores es: ', listaJugadores);
   let respuestaPorConeccion=JSON.stringify({action:'conectado', id: jugadorNuevo.id});
@@ -53,7 +52,7 @@ wss.on('connection', function onSocketConnect(ws) {
       }
       if(data.action===undefined){
           console.error("action not defined");
-          return; //close connection of ws directly in future
+          return;
       }
       if(data.action==='nombre'){
         if(data.juegoDeNuevo){
@@ -84,7 +83,6 @@ wss.on('connection', function onSocketConnect(ws) {
       if (data.turno) {
         let mandaData = JSON.stringify(data);
         let receptor = {};
-        console.log('linea 80 index.js - data.partido es: ', data.partido);
         let jugadorDelPartido=listaJugadores.filter((jugadoresOponentes) => jugadoresOponentes.partido==data.partido);
           // Verificar cual es el que envió el mensaje
         if (jugadorDelPartido[0].id != data.id) {
@@ -96,15 +94,12 @@ wss.on('connection', function onSocketConnect(ws) {
       }
       if(data.action==='meDesconecto'){
         let jugadorParaBorrarDeLaLista=listaJugadores.find((jugadorBorraId)=>jugadorBorraId.id == data.id);
-        console.log('linea 98 index - data.id es: ', data.id);
         let index = listaJugadores.indexOf(jugadorParaBorrarDeLaLista);
-        console.log('linea 99 index - index es: ', index);
         if (index !== -1) {
-            console.log('linea 101 index - listaJugadores[index].nombre es: ', listaJugadores[index].nombre);
-           console.log('linea 102 index.js - el jugador ' + data.nombre + ' se ha desconectado');
+           console.log('linea 99 index.js - el jugador ' + data.nombre + ' se ha desconectado');
            listaJugadores.splice(index, 1);
        } else {
-           console.log('linea 106 index.js - Error al sacar al jugador de la Lista de Jugadores');
+           console.log('linea 102 index.js - Error al eliminar al jugador ' + data.nombre + ' de la Lista de Jugadores');
       }
     }
   });
