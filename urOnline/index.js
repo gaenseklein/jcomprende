@@ -34,17 +34,17 @@ wss.on('connection', function onSocketConnect(ws) {
     } else {
       console.log('Lo siento, no se encontró un id único después de 100 intentos.');
     }
-  console.log('linea 104 index - listaJugadores es: ', listaJugadores);
+  console.log('linea 37 index - listaJugadores es: ', listaJugadores);
   let respuestaPorConeccion=JSON.stringify({action:'conectado', id: jugadorNuevo.id});
   ws.send(respuestaPorConeccion);
-  console.log('linea 34 index.js - nuevo jugador conectado');
-  console.log('linea 35 index.js - listaJugadores.length: ', listaJugadores.length);
+  console.log('linea 40 index.js - nuevo jugador conectado');
+  console.log('linea 41 index.js - listaJugadores.length: ', listaJugadores.length);
   // Manejar mensajes del jugador
   ws.on('message', async function (message) {
       let data;
       try {
           data = JSON.parse(message);
-          console.log("linea 41 index", data);
+          console.log("linea 47 index", data);
       }catch(e){
          console.log(e);
           console.log("malformed message - no JSON");
@@ -86,8 +86,14 @@ wss.on('connection', function onSocketConnect(ws) {
         let jugadorDelPartido=listaJugadores.filter((jugadoresOponentes) => jugadoresOponentes.partido==data.partido);
           // Verificar cual es el que envió el mensaje
         if (jugadorDelPartido[0].id != data.id) {
+          console.log("linea 89 index - receptor es", receptor);
+          console.log("linea 90 index - jugadorDelPartido[0].id es", jugadorDelPartido[0].id);
+          console.log("linea 90 index - data.id es", data.id);
             receptor=jugadorDelPartido[0];
           } else {
+            console.log("linea 89 index - receptor es", receptor);
+            console.log("linea 90 index - jugadorDelPartido[1].id es", jugadorDelPartido[1].id);
+            console.log("linea 90 index - data.id es", data.id);
             receptor=jugadorDelPartido[1];
           }
         receptor.webSocket.send(mandaData);
@@ -105,28 +111,28 @@ wss.on('connection', function onSocketConnect(ws) {
   });
     // Manejar cierre de conexión
   ws.on('close', function () {
-    console.log('linea 109 index - Un jugador se ha desconectado');
+    console.log('linea 108 index - Un jugador se ha desconectado');
   });
 
   ws.pasarAJugadorEnEspera=async function(data){
     let jugadorQueMandaMensaje=listaJugadores.find((jugadorListaId)=>jugadorListaId.id == data.id);
-    console.log('linea 103 index - data es: ', data);
-    console.log('linea 104 index - jugadorQueMandaMensaje es: ', jugadorQueMandaMensaje);
-    console.log('linea 105 index - jugadorQueMandaMensaje.id es: ', jugadorQueMandaMensaje.id);
+    console.log('linea 113 index - data es: ', data);
+    console.log('linea 114 index - jugadorQueMandaMensaje es: ', jugadorQueMandaMensaje);
+    console.log('linea 115 index - jugadorQueMandaMensaje.id es: ', jugadorQueMandaMensaje.id);
     if (jugadorEnEspera==='false') {
       jugadorEnEspera='true';
       jugadorQueMandaMensaje.estado='enEspera';
       jugadorQueMandaMensaje.nombre=data.nombre;
-      console.log('linea 98 index.js - jugador '+ jugadorQueMandaMensaje.nombre +' ahora en espera');
+      console.log('linea 120 index.js - jugador '+ jugadorQueMandaMensaje.nombre +' ahora en espera');
       return;
     } else {
       let cifraAzar=Math.floor(Math.random()*10000);
       jugadorQueMandaMensaje.nombre=data.nombre;
       jugadorQueMandaMensaje.estado='jugador2-partido'+cifraAzar;
-      console.log('linea 103 index - estado del jugador: ', jugadorQueMandaMensaje.estado);
+      console.log('linea 126 index - estado del jugador: ', jugadorQueMandaMensaje.estado);
       jugadorQueMandaMensaje.partido=cifraAzar;
       let busquedaJugadorEnEspera=listaJugadores.find((jugadorEsperando)=>jugadorEsperando.estado === "enEspera");
-      console.log('linea 106 index - habia jugador en espera: ', busquedaJugadorEnEspera.nombre);
+      console.log('linea 129 index - habia jugador en espera: ', busquedaJugadorEnEspera.nombre);
       busquedaJugadorEnEspera.estado='jugador1-partido'+cifraAzar;
       busquedaJugadorEnEspera.partido=cifraAzar;
       jugadorEnEspera='false';

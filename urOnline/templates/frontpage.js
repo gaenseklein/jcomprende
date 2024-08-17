@@ -32,30 +32,30 @@ const template = function(dataFrontpage){
       </div>
       <div id="mesa">
         <div id="tabla">
-          <div class="casilla arriba">0</div>
-          <div class="casilla cinco">1</div>
-          <div class="casilla arriba">2</div>
-          <div class="casilla estrella">3</div>
-          <div class="casilla ojos">4</div>
-          <div class="casilla estrella">5</div>
-          <div id="finJugador1" class="casilla">F1</div>
-          <div class="casilla cuatrocincos">6</div>
-          <div id="finJugador2" class="casilla">F2</div>
-          <div id="inicioJugador1" class="casilla">I1</div>
-          <div class="casilla cinco">7</div>
-          <div id="inicioJugador2" class="casilla">I2</div>
-          <div class="casilla ojos">8</div>
-          <div class="casilla estrella">9</div>
-          <div class="casilla ojos">10</div>
-          <div class="casilla cinco">11</div>
-          <div class="casilla cuatrocincos">12</div>
-          <div class="casilla cinco">13</div>
-          <div class="casilla ojos">14</div>
-          <div class="casilla cinco">15</div>
-          <div class="casilla ojos">16</div>
-          <div class="casilla estrella">17</div>
-          <div class="casilla fondo">18</div>
-          <div class="casilla estrella">19</div>
+          <div class="casilla arriba">13</div>
+          <div class="casilla cinco">12</div>
+          <div class="casilla arriba">13</div>
+          <div class="casilla estrella">14</div>
+          <div class="casilla ojos">11</div>
+          <div class="casilla estrella">14</div>
+          <div id="finJugador1" class="casilla">Fin</div>
+          <div class="casilla cuatrocincos">10</div>
+          <div id="finJugador2" class="casilla">Fin</div>
+          <div id="inicioJugador1" class="casilla">0</div>
+          <div class="casilla cinco">9</div>
+          <div id="inicioJugador2" class="casilla">0</div>
+          <div class="casilla ojos">1</div>
+          <div class="casilla estrella">8</div>
+          <div class="casilla ojos">1</div>
+          <div class="casilla cinco">2</div>
+          <div class="casilla cuatrocincos">7</div>
+          <div class="casilla cinco">2</div>
+          <div class="casilla ojos">3</div>
+          <div class="casilla cinco">6</div>
+          <div class="casilla ojos">3</div>
+          <div class="casilla estrella">4</div>
+          <div class="casilla fondo">5</div>
+          <div class="casilla estrella">4</div>
         </div>
       </div>
 
@@ -73,7 +73,6 @@ const template = function(dataFrontpage){
     <script src="/public/static/scripts/ur.js"></script>
     <script src="/public/static/scripts/scriptwebs.js"></script>
   </html>
-
   `;
   return raw;
 }

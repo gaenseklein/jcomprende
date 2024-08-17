@@ -5,7 +5,7 @@ body{
                       "chat mesa nada"
                       "respuestas alerta botones";
   grid-template-columns: 20% 60% 20%;
-  font-size: xx-large;
+  font-size: calc(1vh + 1vw);
   color: blue;
   text-align: center;
 }
@@ -23,7 +23,7 @@ div#telon{
 }
 
 input#nombre{
-  font-size: 1em;
+  font-size: 100%;
   width: 50vw;
 }
 
@@ -46,14 +46,14 @@ input#nombre{
 #tabla{
   display: grid;
   grid-template-columns: 33% 33% 33%;
-  grid-template-areas: '0 1 2'
-                      '3 4 5'
-                      'F1 6 F2'
-                      'I1 7 I2'
-                      '8 9 10'
-                      '11 12 13'
-                      '14 15 16'
-                      '17 18 19'
+  grid-template-areas: '13A 12 13B'
+                      '14A 11 14B'
+                      'FA 10 FB'
+                      '0A 9 0B'
+                      '1A 8 1B'
+                      '2A 7 2B'
+                      '3A 6 3B'
+                      '4A 5 4B'
   grid-gap: 1vh;
   width: 35vh;
   align-items: center;
@@ -69,7 +69,7 @@ input#nombre{
 }
 
 .casilla{
-  font-size: 6vh;
+  font-size: 200%;
 }
 
 /* las imágenes del fondo */
@@ -111,12 +111,12 @@ div#inicioJugador1 {
 .pieza img {
     width: 6vh;
     z-index:10;
-    grid-area: I2;
+    grid-area: 0B;
 }
 
 .piezaJugador1 img{
     filter:invert(1);
-    grid-area: I1;
+    grid-area: 0A;
 }
 
 #tempPieza{
@@ -186,13 +186,20 @@ div#inicioJugador1 {
   display: none;
 }
 
+div#botonDebotones{
+  grid-area: botones;
+  display: grid;
+}
+
 button#desconectarse, button#jugarDeNuevo, button#reiniciarPartido{
   display: block;
   margin-top: 2vh;
   justify-self: center;
 }
 
-div#botonDebotones{
-  grid-area: botones;
-  display: grid;
+@media screen and (orientation: portrait) {
+
+  body{
+    grid-template-columns: 25% 50% 25%;
+  }
 }

@@ -1,14 +1,15 @@
 // Variables
 const miWebSocket = new WebSocket("ws://192.168.122.117:6500");
+//const miWebSocket = new WebSocket("ws://archivo.comecuco.org:6500"); //para el servidor Comecuco
 
 // Eventos de WebSocket
 miWebSocket.addEventListener("open", function() { // Abre conexión
-    console.log("linea 6 scriptwebs.js - WebSocket abierto");
+    //console.log("linea 6 scriptwebs.js - WebSocket abierto");
     });
 
 miWebSocket.addEventListener("message", async function (message) {
     // Se recibe un mensaje
-    console.log("linea 11 scriptwebs.js - WebSocket ha recibido un mensaje", message.data);
+    //console.log("linea 11 scriptwebs.js - WebSocket ha recibido un mensaje", message.data);
 
       let datos={};
       try {
@@ -25,7 +26,7 @@ miWebSocket.addEventListener("message", async function (message) {
       if(datos.action==='conectado'){
         const idNuevoJugador = document.getElementById("idJugador");
         idNuevoJugador.innerText = datos.id;
-        console.log('linea 28 scriptwebs -idNuevoJugador.innerText es: ', idNuevoJugador.innerText);
+        //console.log('idNuevoJugador es: ', idNuevoJugador.innerText);
         return;
       }
       if(datos.action==='nombre'){
@@ -39,7 +40,7 @@ miWebSocket.addEventListener("message", async function (message) {
         return;
       }
       if(datos.action==='revoloteaDado'){
-        juegoUr.juegaDadosElOtro(datos);
+        juegoUr.juegaDadosElOtroWs(datos);
         return;
       }
       if(datos.action==='mueveLaPieza'){
@@ -74,11 +75,11 @@ miWebSocket.addEventListener("message", async function (message) {
   });
 
 miWebSocket.addEventListener("error", function (evento) {// Ha ocurrido un error
-    console.error("linea 77 scriptwebs.js - WebSocket ha observado un error: ", evento);
+    console.error("WebSocket ha observado un error: ", evento);
 });
 
 miWebSocket.addEventListener("close", function () {// Cierra la conexión
-    console.log("linea 84 scriptwebs.js - WebSocket cerrado.");
+    console.log("WebSocket cerrado");
 });
 
 jugadorMandaMensajeAlServidor = {};
@@ -96,9 +97,7 @@ const divButton = document.getElementById("botonDebotones");
 nombre.addEventListener("keypress", async function definirMiNombre(evento) {
     if (evento.code === "Enter") {
         try {
-          console.log('linea 103');
             await jugadorMandaMensajeAlServidor.enviarNombreAlServidor(nombre.value);
-            console.log('linea 105');
         } catch (error) {
             console.error('Error al recibir respuesta del servidor');
         }
@@ -126,41 +125,33 @@ jugadorMandaMensajeAlServidor.enviarNombreAlServidor = async function(nombreJuga
           id:idJugador.innerText,
           nombre:nombreJugador
         });
-        console.log('linea 133');
               // Creamos una promesa
         return new Promise((resolve, reject) => {
             // Definimos una función para manejar los mensajes entrantes
             const manejarMensaje = (mensaje) => {
                 // Convertimos el mensaje a objeto
                 let respuesta = JSON.parse(mensaje.data);
-                console.log('linea 140 scriptwebs');
                 // Si el mensaje indica "true", resolvemos la promesa con true
                 if (respuesta.action === 'nombreDisponible') {
                     nombre.style.display = "none";
                     espera.style.display = "block";
                     nombreIncorrecto.style.display = "none";
-                      console.log('linea 146 scriptwebs');
                     resolve(true);
                 }else if (respuesta.action === 'nombreNoDisponible') {
                     nombre.value="";
                     nombreIncorrecto.style.display = "block";
-                      console.log('linea 151 scriptwebs');
                     resolve(false);
                 } else {
                     // Si no, rechazamos la promesa
                     reject(new Error('Respuesta inesperada del servidor'));
-                      console.log('linea 156 scriptwebs');
                     console.error('Error al recibir respuesta del servidor');
                 }
                 // Nos desuscribimos del evento 'message' para evitar múltiples respuestas
                 miWebSocket.removeEventListener('message', manejarMensaje);
-                  console.log('linea 161 scriptwebs');
             };
             // Nos suscribimos al evento 'message' para manejar la respuesta del servidor
             miWebSocket.addEventListener('message', manejarMensaje);
-              console.log('linea 165 scriptwebs');
             // Enviamos el mensaje al servidor
-            console.log('linea 167');
             miWebSocket.send(miNombre);
         });
     }
@@ -187,9 +178,19 @@ jugadorMandaMensajeAlServidor.moverPieza = function(resultadoDados, id, idpieza)
           partido: partidoNumero.innerText,
           resultado: resultadoDados
         });
-        console.log('linea 194 - movimiento pieza es: ', movimientoPieza);
         miWebSocket.send(movimientoPieza);
     }
+
+// jugadorMandaMensajeAlServidor.otroTurnoPorEstrella = function(id, nombre){
+//       let otroTurno = JSON.stringify({
+//         action:"otroTurnoPorEstrella",
+//         turno: id,
+//         id:idJugador.innerText,
+//         partido: partidoNumero.innerText,
+//         nombre: nombre
+//       });
+//       miWebSocket.send(otroTurno);
+//     }
 
 jugadorMandaMensajeAlServidor.cartelAlertPerdioTurnoPor0 = function (id, nombre){
   let perdioTurno = JSON.stringify({
@@ -197,8 +198,12 @@ jugadorMandaMensajeAlServidor.cartelAlertPerdioTurnoPor0 = function (id, nombre)
     turno: id,
     id:idJugador.innerText,
     partido: partidoNumero.innerText,
-    nombre: nombre,
+    nombre: nombre
   });
+  console.log("linea 192 scriptweb", id);
+    console.log("linea 193 scriptweb", idJugador.innerText);
+      console.log("linea 194 scriptweb", partidoNumero.innerText);
+        console.log("linea 195 scriptweb", nombre);
   miWebSocket.send(perdioTurno);
 }
 

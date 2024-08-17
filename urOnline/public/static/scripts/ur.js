@@ -7,12 +7,12 @@ juegoUr.init = function(){
     let nombre2 = tituloJugador2.innerText;
     juegoUr.jugador1 = {nombre:nombre1, id:1};
     juegoUr.jugador2 = {nombre:nombre2, id:2};
-    console.log("linea 14 ur.js - juegoUr es: ", juegoUr);
+    // console.log("linea 14 ur.js - juegoUr es: ", juegoUr);
     this.initJuego();
 },
 
 juegoUr.initJuego = function(){
-    console.log('linea 19 ur.js - inicia initJuego()');
+    // console.log('linea 19 ur.js - inicia initJuego()');
     this.casillas = this.crearcasillas();
     this.crearPiezas();
     this.initJugadores();
@@ -26,13 +26,14 @@ juegoUr.crearcasillas = function(){
     for(var x=0;x<24;x++){
         let casilla = {
             html:divs[x],
-            nr:divs[x].innerText,
+            nr:divs[x].innerText, //innerText hace referencia a lo que está escrito en html, entre los símbolos div.
             ocupante:null
         }
-        if(divs[x].innerText==3 || divs[x].innerText==5 || divs[x].innerText==9 || divs[x].innerText==17 || divs[x].innerText==19)casilla.estrella=true;
+        if(divs[x].innerText==4 || divs[x].innerText==8 || divs[x].innerText==14)casilla.estrella=true;
         else casilla.estrella=false;
 
         casilla.puedeEntrar = function(piezaEntrando){
+            console.log("linea 36 ur.js empieza funcion de puedeEntrar");
             //casilla esta vacia, entonces si:
             if(this.ocupante===null)return true;
             //casilla ocupado del mismo jugador:
@@ -46,8 +47,8 @@ juegoUr.crearcasillas = function(){
         casilla.entraPieza = function(piezaEntrando){
             //vamos a mover la pieza gráficamente
             //this.html.appendChild(piezaEntrando.html);
-            console.log('linea 64 ur.js - piezaEntrando.html es: ', piezaEntrando.html);
-            console.log('linea 65 ur.js - casilla.html es: ', casilla.html);
+            console.log('linea 50 ur.js - empieza funcion de piezaEntrando');
+            // console.log('linea 65 ur.js - casilla.html es: ', casilla.html);
             juegoUr.muevePiezaHtml(piezaEntrando.html, this.html);
             if(this.ocupante!=null){
                 //hay una pieza del otro jugador:
@@ -64,6 +65,7 @@ juegoUr.crearcasillas = function(){
 },
 // SEGUI ACA
 juegoUr.animarDados = function(step, tiempo,dados){
+  console.log("linea 67 ur.js empieza funcion de animarDados");
   for(var x=0;x<dados.length;x++){
     var img = document.getElementById("dado"+x);
     var nombreArchivo="dado";
@@ -77,17 +79,19 @@ juegoUr.animarDados = function(step, tiempo,dados){
       if(Math.floor(Math.random()*2)===1)nombreArchivo = nombreArchivo+"a";
       else nombreArchivo = nombreArchivo+"b";
     }
-
     nombreArchivo = nombreArchivo+Math.floor(Math.random()*3);
     nombreArchivo = nombreArchivo+".png";
     img.src="/public/files/"+nombreArchivo;
   }
-  if(step>0)setTimeout(function(){
-    juegoUr.animarDados(step-1,tiempo,dados)
-  },tiempo);
+    console.log("linea 86 ur.js empieza funcion de re animarDados");
+    if(step>0)setTimeout(function(){
+      juegoUr.animarDados(step-1,tiempo,dados)
+    },tiempo);
 },
 
 juegoUr.jugarDados = function(){
+  // debugger;
+    console.log("linea 91 ur.js - está en la funcion jugarDados");
     var dados = [];
     var resultado = 0;
     var imagenesDados = []
@@ -101,7 +105,7 @@ juegoUr.jugarDados = function(){
         }else{
          nombreArchivo = nombreArchivo+"b";
         }
-        nombreArchivo = nombreArchivo+Math.floor(Math.random()*3);
+        nombreArchivo = nombreArchivo+Math.floor(Math.random()*3);// no se para que elige entre los 3 archivos
         nombreArchivo = nombreArchivo+".png";
         img.src="/public/files/"+nombreArchivo;
         imagenesDados[x]=img.src;
@@ -115,10 +119,10 @@ juegoUr.jugarDados = function(){
     this.dadosJuntos = resultado;
 },
 
-juegoUr.turno = function(){
+juegoUr.turno = async function(){
   const esperaTurno = document.getElementById("esperaTurno");
   esperaTurno.style.display = "none";
-  var activarElementos = document.querySelectorAll('button');
+  var activarElementos = document.getElementsByClassName('pieza');
   for (var i = 0; i < activarElementos.length; i++) {
     activarElementos[i].disabled = false;
   }
@@ -132,18 +136,33 @@ juegoUr.turno = function(){
   }
   const miNombre = document.getElementById("nombre");
   const yoJugador=miNombre.value;
-  console.log('linea 131 ur.js ', yoJugador);
-    console.log('linea 132 ur.js ', this.jugadorActual.nombre);
+  // console.log('linea 135 ur.js ', yoJugador);
+  //   console.log('linea 136 ur.js ', this.jugadorActual.nombre);
+  //     console.log('linea 137 ur.js ', this.jugadorActual.id);
   if (this.jugadorActual.nombre===yoJugador) {
-    console.log("turno y jugador son iguales");
+    //console.log("turno y jugador son iguales");
     dados.style.display="grid";
-    this.jugarDados(); //ahora se actualizó los dados y los puntos para el turno actual
+    console.log("linea 141 ur.js - se va a la funcion jugarDados");
+    await this.jugarDados(); //ahora se actualizó los dados y los puntos para el turno actual
+      console.log("linea 143 ur.js - vuelve de la funcion jugarDados");
     if(this.dadosJuntos===0){
-        //alert("oh, un 0... perdiste tu turno");
         //this.terminaTurno(); //no hay más que hacer en un 0
-        setTimeout("juegoUr.terminaTurno('oooh, un 0... perdiste tu turno')",2000);
-        jugadorMandaMensajeAlServidor.cartelAlertPerdioTurnoPor0(this.jugadorActual.id, this.jugadorActual.nombre);
-        return;
+        // setTimeout("jugadorMandaMensajeAlServidor.cartelAlertPerdioTurnoPor0(juegoUr.jugadorActual.id, juegoUr.jugadorActual.nombre)",1000);;
+        // setTimeout("juegoUr.terminaTurno('oooh, un 0... perdiste tu turno')",1000);
+        // return;
+
+        const miNombre0 = document.getElementById("nombre");
+        if (juegoUr.jugadorActual.nombre===miNombre0.value){
+          setTimeout(function(){
+              alert("oooh, un 0... perdiste tu turno");
+          },2000);
+            juegoUr.terminaTurno();
+        } else {
+          setTimeout(function(){
+              alert("Safaste. "+ juegoUr.jugadorActual.nombre +" pierde turno por sacar 0");
+              //juegoUr.turno(); //Esto lo anule porque tiraba los dados dos veces...
+          },2000);
+        }
     }
     //chequear si hay movimientos posibles. sino termina turno
     let posible=false; //empezamos con false, no hay movimientos
@@ -151,8 +170,8 @@ juegoUr.turno = function(){
         let pieza = this.jugadorActual.piezas[x];
         let camino = this.jugadorActual.camino;
         let futuropos = pieza.posicion + this.dadosJuntos;
-        console.log("linea 144 ur.js - pieza.posicion es: ", pieza.posicion);
-        console.log("linea 145 ur.js - futuropos es: ", futuropos);
+        // console.log("linea 144 ur.js - pieza.posicion es: ", pieza.posicion);
+        // console.log("linea 145 ur.js - futuropos es: ", futuropos);
         if(futuropos>=camino.length)continue;//si no puede moverse esa pieza,
         //continue indica que termine ese ciclo y siga con el siguiente ciclo
         //del loop para checkear el resto de piezas
@@ -160,9 +179,9 @@ juegoUr.turno = function(){
             posible=true; //si, es posible - esta en gol
             break; //no busca mas, una alcanza
         }*/
-        if(camino[futuropos].puedeEntrar(pieza)){
+        if(await camino[futuropos].puedeEntrar(pieza)){
             posible=true; //si, es posible
-            console.log("linea 165 ur.js - camino[futuropos] es: ", camino[futuropos]);
+            // console.log("linea 165 ur.js - camino[futuropos] es: ", camino[futuropos]);
             break; //no busca mas, una alcanza
         }else if(camino[futuropos].estrella &&
                 camino[futuropos].ocupante.jugador != this.jugadorActual &&
@@ -170,21 +189,24 @@ juegoUr.turno = function(){
                 ; //estrella:salta a la siguiente casilla
     }
     if(posible===false){
-        setTimeout("juegoUr.terminaTurno('ooooh... no hay movimientos posibles... perdiste tu turno '+juegoUr.jugadorActual.nombre);",800);
+        setTimeout("juegoUr.terminaTurno('ooooh... no hay movimientos posibles... perdiste tu turno '+juegoUr.jugadorActual.nombre)",800);
         jugadorMandaMensajeAlServidor.cartelAlertPerdioTurnoPorNoMovimiento(this.jugadorActual.id, this.jugadorActual.nombre);
     }
   }else {
     console.log("turno y jugador son diferentes");
+    // let dados1 = document.getElementById("dados");
+    // dados1.style.display="none";
     esperaTurno.style.display = "block";
       // Deshabilitar todos los elementos button (las piezas) en la página
-   var bloquearElementos = document.querySelectorAll('button');
+   var bloquearElementos = document.getElementsByClassName('pieza');
    for (var i = 0; i < bloquearElementos.length; i++) {
      bloquearElementos[i].disabled = true;
    }
   }
 },
 
-juegoUr.juegaDadosElOtro = function(data){
+juegoUr.juegaDadosElOtroWs = function(data){
+  console.log("linea 195 ur.js empieza funcion de juegaDadosElOtroWs");
     let dados = document.getElementById("dados");
     dados.style.display="grid";
     var dadosJugados = data.dados;
@@ -202,21 +224,28 @@ juegoUr.juegaDadosElOtro = function(data){
 },
 
 juegoUr.cartelPierdeTurnoPor0Ws = function(data){
-    setTimeout("juegoUr.terminaTurno(data.nombre +' sacó un 0... pierde el turno')",2000);
+  // console.log("linea 213 ", data.nombre);
+    setTimeout(alert("Vaya golpe de suerte has tenido! "+data.nombre +" sacó un 0... así que pierde el turno"),2000);
+    //juegoUr.turno();
+    //setTimeout("juegoUr.terminaTurno(data.nombre +' sacó un 0... pierde el turno')",2000);
     return;
-}
+},
 
 juegoUr.cartelPierdeTurnoPorNoMovimientoWs = function(data){
-    console.log('linea 212 index - nombre del jugador que no tiene movimientos: ', nombre);
-    setTimeout("juegoUr.terminaTurno(data.nombre +' no tiene movimientos posibles... pierde el turno')",2000);
+    // console.log('linea 212 index - nombre del jugador que no tiene movimientos: ', nombre);
+    alert("Increíble! "+data.nombre +" no tiene movimientos posibles... así que pierde el turno");
+    //setTimeout("juegoUr.terminaTurno(data.nombre +' no tiene movimientos posibles... pierde el turno')",2000);
     return;
-}
+},
 
 juegoUr.terminaTurno = function(texto){
+      console.log("linea 228 ur.js empieza funcion terminaTurno pero antes del alert");
     if(texto)alert(texto);
+    console.log("linea 229 ur.js empieza funcion terminaTurno pero despues del alert");
     //chequear si todos estan al fin:
     let terminaJuego = true; //esta vez empezamos en true
     for(var x=0;x<this.jugadorActual.piezas.length;x++){
+      // console.log("linea 227");
         //buscamos si todavia hay piezas en juego
         let pieza = this.jugadorActual.piezas[x]; // la pieza que chequeamos este turno
         if(pieza.posicion < this.jugadorActual.camino.length-1){
@@ -229,13 +258,18 @@ juegoUr.terminaTurno = function(texto){
         this.terminaJuego(); //llama la funcion para terminar el juego
         return; //no hagas nada mas
     }
+    // console.log("linea 237");
     if(this.jugadorActual===this.jugador1){
+      // console.log("linea 239", this.jugadorActual);
+      //   console.log("linea 240", this.jugador1);
         this.jugadorActual = this.jugador2;
     }else{
         this.jugadorActual=this.jugador1;
+          // console.log("linea 244");
     }
-    this.turno();
+   this.turno();
     var dados = document.getElementById("dados");
+      // console.log("linea 256 ",  this.jugadorActual.id);
     dados.classList.toggle("jugador2", this.jugadorActual.id===2);
 },
 
@@ -359,10 +393,9 @@ juegoUr.initJugadores = function(){
 },
 
 juegoUr.muevePiezaHtml = function(pieza,target){
-  console.log('linea 253 ur.js - pieza es: ', pieza);
     target.appendChild(pieza);
     let img = pieza.children[0];
-    console.log('linea 256 ur.js - target es: ', target);
+    // console.log('linea 383 ur.js - se mueve la pieza y termina el turno');
     img.style.position = "absolute";
     img.style.top = target.offsetTop+"px";
     img.style.left = target.offsetLeft+"px";
@@ -397,13 +430,13 @@ juegoUr.crearPiezas = function(){
 
 //todos funciones de las piezas:
 var piezaClick = function(){
-    console.log('linea 380 - activo jugadorMandaMensajeAlServidor.moverPieza()');
+    // console.log('linea 417 - clickeo en la pieza que voy a mover y activo jugadorMandaMensajeAlServidor.moverPieza()');
     jugadorMandaMensajeAlServidor.moverPieza(juegoUr.dadosJuntos, juegoUr.jugadorActual.id, this.id);
     juegoUr.piezaClickeada(this);
   }
 
-juegoUr.piezaClickeada = function(data){
-  console.log('linea 385 - activo piezaClickeada(this) y data es: ', data);
+juegoUr.piezaClickeada = async function(data){
+  // console.log('linea 423 - analizo si la pieza que clickee puede moverse');
     if(juegoUr.dadosJuntos===0)return; //si hay un 0 un click no hace nada
     if(data.jugador!=juegoUr.jugadorActual)return; //no te mueves si no es tu turno
     let pos = data.posicion;
@@ -413,12 +446,12 @@ juegoUr.piezaClickeada = function(data){
     //la casilla a donde queremos mover:
     let futurocasilla = data.jugador.camino[futuroPos];
     //pero si es una estrella y ocupada por otro, movemos a la siguiente
-    if(futurocasilla.puedeEntrar(data)===false  && futurocasilla.estrella===true
+    if(await futurocasilla.puedeEntrar(data)===false  && futurocasilla.estrella===true
         && futurocasilla.ocupante.jugador!=data.jugador){
         futuroPos++;
         futurocasilla = data.jugador.camino[futuroPos];
     }
-    if(futurocasilla.puedeEntrar(data)===true){
+    if(await futurocasilla.puedeEntrar(data)===true){
         data.posicion = futuroPos;
         futurocasilla.entraPieza(data);
         if(data.casilla!=null)data.casilla.ocupante=null; //liberamos la casilla que estábamos ocupando
@@ -426,10 +459,18 @@ juegoUr.piezaClickeada = function(data){
         //estamos listo por aqui.
         //si estamos en estrella ahora tenemos otro turno, sino termina el turno:
         if(data.casilla.estrella === true){
+          const miNombre = document.getElementById("nombre");
+          if (juegoUr.jugadorActual.nombre===miNombre.value){
             setTimeout(function(){
-                alert("buenisimo! tienes otro turno "+juegoUr.jugadorActual.nombre);
-                juegoUr.turno();
-            },1000);
+                alert("Buenísimo! tienes otro turno "+juegoUr.jugadorActual.nombre);
+            },2000);
+              juegoUr.turno();
+          } else {
+            setTimeout(function(){
+                alert("Paciencia. "+ juegoUr.jugadorActual.nombre +" tiene otro turno por caer en Estrella");
+                //juegoUr.turno(); //Esto lo anule porque tiraba los dados dos veces...
+            },2000);
+          }
         }else{
             //termina el turno
             juegoUr.terminaTurno();
@@ -439,17 +480,17 @@ juegoUr.piezaClickeada = function(data){
 
 juegoUr.piezaClickWs = function(data){
   let piezaAmover=null;
-  console.log('juegoUr.piezas es: ',juegoUr.piezas);
+  // console.log('juegoUr.piezas es: ',juegoUr.piezas);
   for (let i = 0; i < juegoUr.piezas.length; i++) {
-    console.log('juegoUr.piezas[i].id es: ', juegoUr.piezas[i].id);
+    // console.log('juegoUr.piezas[i].id es: ', juegoUr.piezas[i].id);
     if (juegoUr.piezas[i].id===data.idPieza) {
-    console.log('linea 419 - juegoUr.piezas[i] es:', juegoUr.piezas[i]);
+    // console.log('linea 419 - juegoUr.piezas[i] es:', juegoUr.piezas[i]);
       piezaAmover=juegoUr.piezas[i];
-      console.log('linea 427 - piezaAmover es: ', piezaAmover);
+      // console.log('linea 427 - piezaAmover es: ', piezaAmover);
       break;
     }
   };
-  console.log('piezaAmover es: ', piezaAmover);
+  // console.log('piezaAmover es: ', piezaAmover);
     juegoUr.dadosJuntos = data.resultado;
     if(data.turno===1){
         this.jugadorActual = this.jugador1;
